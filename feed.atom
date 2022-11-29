@@ -3,7 +3,7 @@
   <id>https://www.nushell.sh/</id>
   <title>Nushell</title>
   <subtitle>A new type of shell.</subtitle>
-  <updated>2022-11-29T19:05:00.663Z</updated>
+  <updated>2022-11-29T20:46:04.478Z</updated>
   <generator>vuepress-plugin-feed2</generator>
   <link rel="self" href="https://www.nushell.sh/feed.atom"/>
   <link rel="alternate" href="https://www.nushell.sh/"/>
@@ -14,7 +14,7 @@
     <title type="html">Nushell 0.72</title>
     <id>https://www.nushell.sh/blog/2022-11-29-nushell-0.72.html</id>
     <link href="https://www.nushell.sh/blog/2022-11-29-nushell-0.72.html"/>
-    <updated>2022-11-29T18:58:21.000Z</updated>
+    <updated>2022-11-29T20:39:28.000Z</updated>
     <summary type="html"><![CDATA[<h1 id="nushell-0-72" tabindex="-1"> Nushell 0.72</h1>
 <p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
 <p>Today, we're releasing version 0.72 of Nu. This release includes many new features: mutability, looping, early returns, changes to the core commands, and much more.</p>
@@ -56,7 +56,7 @@
 </code></pre></div><h2 id="closures-blocks" tabindex="-1"> Closures/blocks</h2>
 <p>We have now split closures and blocks into two separate value types. A closure can have parameters, can close over variables outside of its scope, and can be passed as a value.</p>
 <p>An example closure:</p>
-<div><pre><code>ls | each {|| print $it.name }
+<div><pre><code>ls | each {|it| print $it.name }
 </code></pre></div><p>You can also think of creating a custom command like <code>def foo [] { ... }</code> as creating a closure.</p>
 <p>A block is much simpler and is used as the bottom of commands like <code>if</code> and loops.</p>
 <p>An example block:</p>

@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Tue, 29 Nov 2022 19:05:00 GMT</pubDate>
-    <lastBuildDate>Tue, 29 Nov 2022 19:05:00 GMT</lastBuildDate>
+    <pubDate>Tue, 29 Nov 2022 20:46:04 GMT</pubDate>
+    <lastBuildDate>Tue, 29 Nov 2022 20:46:04 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -57,7 +57,7 @@ Today, we're releasing version 0.72 of Nu. This release includes many new featur
 </code></pre></div><h2 id="closures-blocks" tabindex="-1"> Closures/blocks</h2>
 <p>We have now split closures and blocks into two separate value types. A closure can have parameters, can close over variables outside of its scope, and can be passed as a value.</p>
 <p>An example closure:</p>
-<div><pre><code>ls | each {|| print $it.name }
+<div><pre><code>ls | each {|it| print $it.name }
 </code></pre></div><p>You can also think of creating a custom command like <code>def foo [] { ... }</code> as creating a closure.</p>
 <p>A block is much simpler and is used as the bottom of commands like <code>if</code> and loops.</p>
 <p>An example block:</p>
