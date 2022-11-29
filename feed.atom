@@ -3,7 +3,7 @@
   <id>https://www.nushell.sh/</id>
   <title>Nushell</title>
   <subtitle>A new type of shell.</subtitle>
-  <updated>2022-11-29T18:38:09.335Z</updated>
+  <updated>2022-11-29T19:05:00.663Z</updated>
   <generator>vuepress-plugin-feed2</generator>
   <link rel="self" href="https://www.nushell.sh/feed.atom"/>
   <link rel="alternate" href="https://www.nushell.sh/"/>
@@ -14,7 +14,7 @@
     <title type="html">Nushell 0.72</title>
     <id>https://www.nushell.sh/blog/2022-11-29-nushell-0.72.html</id>
     <link href="https://www.nushell.sh/blog/2022-11-29-nushell-0.72.html"/>
-    <updated>2022-11-29T18:31:00.000Z</updated>
+    <updated>2022-11-29T18:58:21.000Z</updated>
     <summary type="html"><![CDATA[<h1 id="nushell-0-72" tabindex="-1"> Nushell 0.72</h1>
 <p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
 <p>Today, we're releasing version 0.72 of Nu. This release includes many new features: mutability, looping, early returns, changes to the core commands, and much more.</p>
@@ -43,7 +43,11 @@
     print "look, no crash."
     print $e
 }
-</code></pre></div><h2 id="redirection" tabindex="-1"> Redirection</h2>
+</code></pre></div><h2 id="auto-expanding-data-views" tabindex="-1"> Auto-expanding data views</h2>
+<p><img src="@source/assets/images/0_72_auto_expand.png" alt="Expanded data view"></p>
+<p>With the new default config, we now also detect the terminal width and will automatically expand the data view to include more information if it's available.</p>
+<p>This uses an improved expanding data view capability from 0.70.</p>
+<h2 id="redirection" tabindex="-1"> Redirection</h2>
 <p>This release also includes a new way of redirecting the stdout and/or stderr of external commands. This gives easier access to the output streams than was previously possible.</p>
 <div><pre><code>> cat foo.txt out> bar.txt
 </code></pre></div><div><pre><code>> cat missingfilename.txt err> my_error.txt
@@ -139,7 +143,7 @@ This is consistent with <code>bit-and</code>, <code>bit-xor</code>, and <code>bi
 <li><code>cd_with_abbreviations</code> has been moved into a <code>cd</code> record. Further <code>cd</code> config options to accompany it may appear in the future.</li>
 <li><code>history_file_format</code>, <code>sync_history_on_enter</code> and <code>max_history_size</code> have been moved to a <code>history</code> subrecord.</li>
 <li><code>filesize_metric</code> and <code>filesize_format</code> have been moved to a <code>filesize</code> subrecord.</li>
-<li><code>case_sensitive_completions</code>, <code>quick_completions</code>,  <code>partial_completions</code> and <code>completion_algorithm</code> have been moved into a <code>completions</code> subrecord.</li>
+<li><code>case_sensitive_completions</code>, <code>quick_completions</code>, <code>partial_completions</code> and <code>completion_algorithm</code> have been moved into a <code>completions</code> subrecord.</li>
 <li>The <code>completions</code> subrecord also contains an <code>external</code> subrecord.
 <ul>
 <li><code>enable_external_completion</code>, <code>max_external_completion_results</code>, and <code>external_completer</code> have been moved into the aforementioned subrecord.</li>

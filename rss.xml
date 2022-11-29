@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Tue, 29 Nov 2022 18:38:09 GMT</pubDate>
-    <lastBuildDate>Tue, 29 Nov 2022 18:38:09 GMT</lastBuildDate>
+    <pubDate>Tue, 29 Nov 2022 19:05:00 GMT</pubDate>
+    <lastBuildDate>Tue, 29 Nov 2022 19:05:00 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -44,7 +44,11 @@ Today, we're releasing version 0.72 of Nu. This release includes many new featur
     print "look, no crash."
     print $e
 }
-</code></pre></div><h2 id="redirection" tabindex="-1"> Redirection</h2>
+</code></pre></div><h2 id="auto-expanding-data-views" tabindex="-1"> Auto-expanding data views</h2>
+<p><img src="@source/assets/images/0_72_auto_expand.png" alt="Expanded data view"></p>
+<p>With the new default config, we now also detect the terminal width and will automatically expand the data view to include more information if it's available.</p>
+<p>This uses an improved expanding data view capability from 0.70.</p>
+<h2 id="redirection" tabindex="-1"> Redirection</h2>
 <p>This release also includes a new way of redirecting the stdout and/or stderr of external commands. This gives easier access to the output streams than was previously possible.</p>
 <div><pre><code>> cat foo.txt out> bar.txt
 </code></pre></div><div><pre><code>> cat missingfilename.txt err> my_error.txt
@@ -140,7 +144,7 @@ This is consistent with <code>bit-and</code>, <code>bit-xor</code>, and <code>bi
 <li><code>cd_with_abbreviations</code> has been moved into a <code>cd</code> record. Further <code>cd</code> config options to accompany it may appear in the future.</li>
 <li><code>history_file_format</code>, <code>sync_history_on_enter</code> and <code>max_history_size</code> have been moved to a <code>history</code> subrecord.</li>
 <li><code>filesize_metric</code> and <code>filesize_format</code> have been moved to a <code>filesize</code> subrecord.</li>
-<li><code>case_sensitive_completions</code>, <code>quick_completions</code>,  <code>partial_completions</code> and <code>completion_algorithm</code> have been moved into a <code>completions</code> subrecord.</li>
+<li><code>case_sensitive_completions</code>, <code>quick_completions</code>, <code>partial_completions</code> and <code>completion_algorithm</code> have been moved into a <code>completions</code> subrecord.</li>
 <li>The <code>completions</code> subrecord also contains an <code>external</code> subrecord.
 <ul>
 <li><code>enable_external_completion</code>, <code>max_external_completion_results</code>, and <code>external_completer</code> have been moved into the aforementioned subrecord.</li>
