@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Fri, 02 Dec 2022 12:01:43 GMT</pubDate>
-    <lastBuildDate>Fri, 02 Dec 2022 12:01:43 GMT</lastBuildDate>
+    <pubDate>Fri, 02 Dec 2022 17:26:29 GMT</pubDate>
+    <lastBuildDate>Fri, 02 Dec 2022 17:26:29 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -320,7 +320,7 @@ To summarize:</p>
 <ol>
 <li>If you want to make some change to Nushell that is more involved than simple bug-fixing, please go to <a href="https://discordapp.com/invite/NtAbbGn" target="_blank" rel="noopener noreferrer">Discord</a> or a <a href="https://github.com/nushell/nushell/issues/new/choose" target="_blank" rel="noopener noreferrer">GitHub issue</a> and chat with some core team members and/or other contributors about it.</li>
 <li>After getting a green light from the core team, implement the feature, open a pull request (PR) and write a full description of the change.</li>
-<li>If your PR includes any use-facing features (such as adding a flag to a command), clearly list them in the PR description.</li>
+<li>If your PR includes any user-facing features (such as adding a flag to a command), clearly list them in the PR description.</li>
 <li>Then, core team members and other regular contributors will review the PR and suggest changes.</li>
 <li>When we all agree, the PR will be merged.</li>
 <li>If your PR includes any user-facing features, make sure the changes are also reflected in <a href="https://github.com/nushell/nushell.github.io" target="_blank" rel="noopener noreferrer">the documentation</a> after the PR is merged.</li>
