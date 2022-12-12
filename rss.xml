@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Mon, 12 Dec 2022 08:56:37 GMT</pubDate>
-    <lastBuildDate>Mon, 12 Dec 2022 08:56:37 GMT</lastBuildDate>
+    <pubDate>Mon, 12 Dec 2022 09:09:55 GMT</pubDate>
+    <lastBuildDate>Mon, 12 Dec 2022 09:09:55 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -31,14 +31,14 @@ Today, we're releasing version 0.72 of Nu. This release includes many new featur
 <h1 id="themes-of-this-release-new-features" tabindex="-1"> Themes of this release / New features</h1>
 <h2 id="try-catch" tabindex="-1"> Try/catch</h2>
 <p>Starting with 0.72, it's now much easier to run a command that might fail and then handle the failure if it happens.</p>
-<div><pre><code>try {
+<div data-ext="text"><pre><code>try {
     1 / 0
 } catch {
     print "look, no crash"
 }
 </code></pre></div><p>The <code>catch</code> part of the <code>try/catch</code> is optional. Without it, the <code>try</code> block will run, and any error that occurs will be ignored.</p>
 <p>You can also access the error, if one happens, using a closure syntax:</p>
-<div><pre><code>try {
+<div data-ext="text"><pre><code>try {
     1 / 0
 } catch {|e|
     print "look, no crash."
@@ -50,28 +50,28 @@ Today, we're releasing version 0.72 of Nu. This release includes many new featur
 <p>This uses an improved expanding data view capability from 0.70.</p>
 <h2 id="redirection" tabindex="-1"> Redirection</h2>
 <p>This release also includes a new way of redirecting the stdout and/or stderr of external commands. This gives easier access to the output streams than was previously possible.</p>
-<div><pre><code>> cat foo.txt out> bar.txt
-</code></pre></div><div><pre><code>> cat missingfilename.txt err> my_error.txt
+<div data-ext="text"><pre><code>> cat foo.txt out> bar.txt
+</code></pre></div><div data-ext="text"><pre><code>> cat missingfilename.txt err> my_error.txt
 </code></pre></div><p>You can also create a stream built from the above, allowing one stream to empty and then be followed by the other stream:</p>
-<div><pre><code>> git status out+err> git_status.txt
+<div data-ext="text"><pre><code>> git status out+err> git_status.txt
 </code></pre></div><h2 id="closures-blocks" tabindex="-1"> Closures/blocks</h2>
 <p>We have now split closures and blocks into two separate value types. A closure can have parameters, can close over variables outside of its scope, and can be passed as a value.</p>
 <p>An example closure:</p>
-<div><pre><code>ls | each {|it| print $it.name }
+<div data-ext="text"><pre><code>ls | each {|it| print $it.name }
 </code></pre></div><p>You can also think of creating a custom command like <code>def foo [] { ... }</code> as creating a closure.</p>
 <p>A block is much simpler and is used as the bottom of commands like <code>if</code> and loops.</p>
 <p>An example block:</p>
-<div><pre><code>if true {
+<div data-ext="text"><pre><code>if true {
     print "hello!"
 }
 </code></pre></div><p>Blocks don't close over (or capture) variables, don't have parameters, and can't be passed as a value. Blocks, however, do have one special trick...</p>
 <h2 id="mutation" tabindex="-1"> Mutation</h2>
 <p>Starting in this release, you can create local mutable variables. You can create mutable variables using the <code>mut</code> keyword:</p>
-<div><pre><code>mut x = 1
+<div data-ext="text"><pre><code>mut x = 1
 $x = $x + 100
 print $x
 </code></pre></div><p>A mutable variable can only live and change in the closure in which it's created. Blocks, however, have access to the mutable variables in the parent closure. For example, mutating a variable inside of the block used in an <code>if</code> call is valid:</p>
-<div><pre><code>mut x = 1
+<div data-ext="text"><pre><code>mut x = 1
 if true {
     $x += 1000
 }
@@ -79,11 +79,11 @@ print $x
 </code></pre></div><h2 id="loop-while" tabindex="-1"> Loop/while</h2>
 <p>The 0.72 release also includes a few new looping commands: <code>loop</code> and <code>while</code>.</p>
 <p>The <code>loop</code> command runs a block forever:</p>
-<div><pre><code>loop {
+<div data-ext="text"><pre><code>loop {
     print "hit ctrl-c to break out of this example"
 }
 </code></pre></div><p>The <code>while</code> command will run its block as long as a condition is met:</p>
-<div><pre><code>mut x = 0
+<div data-ext="text"><pre><code>mut x = 0
 while $x &lt; 10 {
     print $x
     $x += 1
@@ -92,7 +92,7 @@ while $x &lt; 10 {
 <p>Loops can now also use the <code>break</code> and <code>continue</code> feature common in many programming languages. <code>break</code> will break out of the current loop. And <code>continue</code> will continue the loop at the next iteration.</p>
 <h2 id="return" tabindex="-1"> Return</h2>
 <p>The 0.72 release also includes the ability to return early from a closure or command.</p>
-<div><pre><code>def foo [x] {
+<div data-ext="text"><pre><code>def foo [x] {
     if $x > 10 {
         return 1000
     }
@@ -105,7 +105,7 @@ while $x &lt; 10 {
 <p>To continue using dataframe commands, you can build Nu from source using the <code>dataframe</code> <a href="https://doc.rust-lang.org/cargo/reference/features.html" target="_blank" rel="noopener noreferrer">Cargo feature</a>. For example, to install using Cargo: <code>cargo install nu --features=dataframe</code></p>
 <h2 id="allow-reloading-overlay-definitions-kubouch" tabindex="-1"> Allow reloading overlay definitions (<a href="https://github.com/nushell/nushell/pull/7231" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p>A common pattern in using overlays is shadowing an existing environment variable, such as PROMPT_COMMAND. However, <code>overlay use</code> would keep loading the value from the first activation. It is best explained with an example. Assume the following module:</p>
-<div><pre><code>module prompt {
+<div data-ext="text"><pre><code>module prompt {
     export-env {
         let-env PROMPT_COMMAND = (date now | into string)
     }
@@ -153,7 +153,7 @@ This is consistent with <code>bit-and</code>, <code>bit-xor</code>, and <code>bi
 <li><code>table_mode</code>, <code>table_index_mode</code> and the <code>table_trim</code> subrecord have been moved into a <code>table</code> subrecord.</li>
 </ul>
 <p>The new grouped options look like this:</p>
-<div><pre><code>  ls: <span>{</span>
+<div data-ext="sh"><pre><code>  ls: <span>{</span>
     use_ls_colors: <span>true</span> <span># use the LS_COLORS environment variable to colorize output</span>
     clickable_links: <span>true</span> <span># enable or disable clickable links. Your terminal has to support links.</span>
   <span>}</span>
@@ -193,7 +193,7 @@ This is consistent with <code>bit-and</code>, <code>bit-xor</code>, and <code>bi
     format: <span>"auto"</span> <span># b, kb, kib, mb, mib, gb, gib, tb, tib, pb, pib, eb, eib, zb, zib, auto</span>
   <span>}</span>
 </code></pre></div><p>To output your existing options in the above format (that could be pasted into your config.nu file before you delete the old options), run this code in your copy of Nushell:</p>
-<div><pre><code><span>$env</span>.config <span>|</span> <span>do</span> <span>{</span> <span>{</span> ls: <span>{</span> use_ls_colors: <span>$in</span>.use_ls_colors clickable_links: <span>$in</span>.show_clickable_links_in_ls <span>}</span> rm: <span>{</span> always_trash: <span>$in</span>.rm_always_trash <span>}</span> cd: <span>{</span> abbreviations: <span>$in</span>.cd_with_abbreviations <span>}</span> table: <span>{</span> mode: <span>$in</span>.table_mode index_mode: <span>$in</span>.table_index_mode trim: <span>$in</span>.table_trim <span>}</span> history: <span>{</span> max_size: <span>$in</span>.max_history_size sync_on_enter: <span>$in</span>.sync_history_on_enter file_format: <span>$in</span>.history_file_format <span>}</span> completions: <span>{</span> case_sensitive: <span>$in</span>.case_sensitive_completions quick: <span>$in</span>.quick_completions partial: <span>$in</span>.partial_completions algorithm:<span>$in</span>.completion_algorithm external: <span>{</span> enable: <span>$in</span>.enable_external_completion max_results: <span>$in</span>.max_external_completion_results completer:<span>$in</span>.external_completer <span>}</span> <span>}</span> <span>}</span> <span>}</span> <span>|</span> to nuon <span>|</span> str substring <span>1</span><span>..</span>-1
+<div data-ext="sh"><pre><code><span>$env</span>.config <span>|</span> <span>do</span> <span>{</span> <span>{</span> ls: <span>{</span> use_ls_colors: <span>$in</span>.use_ls_colors clickable_links: <span>$in</span>.show_clickable_links_in_ls <span>}</span> rm: <span>{</span> always_trash: <span>$in</span>.rm_always_trash <span>}</span> cd: <span>{</span> abbreviations: <span>$in</span>.cd_with_abbreviations <span>}</span> table: <span>{</span> mode: <span>$in</span>.table_mode index_mode: <span>$in</span>.table_index_mode trim: <span>$in</span>.table_trim <span>}</span> history: <span>{</span> max_size: <span>$in</span>.max_history_size sync_on_enter: <span>$in</span>.sync_history_on_enter file_format: <span>$in</span>.history_file_format <span>}</span> completions: <span>{</span> case_sensitive: <span>$in</span>.case_sensitive_completions quick: <span>$in</span>.quick_completions partial: <span>$in</span>.partial_completions algorithm:<span>$in</span>.completion_algorithm external: <span>{</span> enable: <span>$in</span>.enable_external_completion max_results: <span>$in</span>.max_external_completion_results completer:<span>$in</span>.external_completer <span>}</span> <span>}</span> <span>}</span> <span>}</span> <span>|</span> to nuon <span>|</span> str substring <span>1</span><span>..</span>-1
 </code></pre></div><h2 id="minimum-rust-version-has-bumped-to-1-65" tabindex="-1"> Minimum Rust version has bumped to 1.65</h2>
 <p>Due to some breakage in dependencies, we've gone ahead and bumped the required version of Rust to 1.65, which addresses the issue. Apologies to anyone who is inconvenienced by the bump. We anticipate returning to the Rust-1 versions in the future.</p>
 <h1 id="full-changelog" tabindex="-1"> Full changelog</h1>
@@ -275,7 +275,7 @@ Today, we're releasing version 0.71 of Nu. This release includes new operators, 
 <h2 id="new-operator-merelymyself" tabindex="-1"> New <code>++</code> operator (merelymyself)</h2>
 <p>In this release, you can now use the <a href="https://github.com/nushell/nushell/pull/6766" target="_blank" rel="noopener noreferrer"><code>++</code> operator to append lists together</a>.</p>
 <p>For example, you can combine two lists into a new lists made up of the both lists:</p>
-<div><pre><code><span>></span> <span>[</span><span>1</span>, <span>2</span><span>]</span> ++ <span>[</span><span>3</span>, <span>4</span><span>]</span>
+<div data-ext="sh"><pre><code><span>></span> <span>[</span><span>1</span>, <span>2</span><span>]</span> ++ <span>[</span><span>3</span>, <span>4</span><span>]</span>
 </code></pre></div><p><em>Note: Currently, this operator cannot be used to join two tables. This functionality is still being worked on and will likely be present in the next version.</em></p>
 <h2 id="improved-consistency-across-commands-and-types" tabindex="-1"> Improved consistency across commands and types</h2>
 <p>Nushell continues improve quality of the language and shell with a set of consistency improvements in this release. These include:</p>
@@ -299,7 +299,7 @@ Today, we're releasing version 0.71 of Nu. This release includes new operators, 
 <h2 id="right-prompts-can-now-be-on-the-last-line-nibon7" tabindex="-1"> Right prompts can now be on the last line (nibon7)</h2>
 <p>Previously the right prompt appeared only on the same line where the user input started. Now you can choose to <a href="https://github.com/nushell/nushell/pull/6781" target="_blank" rel="noopener noreferrer">place the right prompt part on the last line of user input</a>.
 This feature is not enabled by default, you can enable it using the <code>config nu</code> command to modify the config.nu file, just set <code>render_right_prompt_on_last_line</code> to true:</p>
-<div><pre><code>let-env config {
+<div data-ext="text"><pre><code>let-env config {
   render_right_prompt_on_last_line : true
   ...
 }
@@ -645,9 +645,9 @@ If you wish, you can manually name the overlay, for example <code>overlay use ac
 <h2 id="grammar-experiments-jt" tabindex="-1"> Grammar Experiments (JT)</h2>
 <p>We've recently also started working on some improvements to Nushell's syntax. While these aren't part of Nushell 0.69, you can try this experimental syntax in our new <a href="https://github.com/nushell/grammar" target="_blank" rel="noopener noreferrer">grammar</a> repo. Some experiments we're looking into:</p>
 <p>Traditional function definition syntax</p>
-<div><pre><code>def foo(x: int) { ... }
+<div data-ext="text"><pre><code>def foo(x: int) { ... }
 </code></pre></div><p>Traditional function call syntax</p>
-<div><pre><code>foo(3)
+<div data-ext="text"><pre><code>foo(3)
 </code></pre></div><p>And much more. We're hoping to talk more about these experiments as they mature.</p>
 <h1 id="breaking-changes" tabindex="-1"> Breaking changes</h1>
 <p>We found a regression in the correctness of the <code>-d</code> and <code>-t</code> flags of <code>touch</code>. To get the release out, we've removed these flags, but hope to replace them with correct implementations in the future.</p>
@@ -748,7 +748,7 @@ You can read a bit more about this in <a href="https://www.nushell.sh/book/think
 <p><code>source</code> still continues to work in this release but will be removed in 0.69. In 0.69, we will also change all config files to be modules, not plain scripts.</p>
 <h3 id="module-envrionment-changes-kubouch-kubouch" tabindex="-1"> Module envrionment changes (<a href="https://github.com/nushell/nushell/pull/6355" target="_blank" rel="noopener noreferrer">kubouch</a>, <a href="https://github.com/nushell/nushell/pull/6382" target="_blank" rel="noopener noreferrer">kubouch</a>)</h3>
 <p>The way to define environment variables from modules used to be</p>
-<div><pre><code>> module spam {
+<div data-ext="text"><pre><code>> module spam {
     export env FOO { 'bar' }
 }
 
@@ -760,13 +760,13 @@ Since 0.67, it is possible to <a href="https://github.com/nushell/nushell/pull/6
 If you want to bring both environment and commands/aliases, you need to use the <code>source-env</code> and <code>use</code> commands separately (or use overlays).</p>
 <p>Also, we simplified defining the environment in modules. Instead of defining environment variables with <code>export env</code> individually, there is a single <code>export-env { }</code> block for the whole module (see the example in the next section).</p>
 <p>If you call <code>source-env</code> on that module, the <code>export-env</code> command will get evaluated and its environment kept in the current scope.</p>
-<div><pre><code># spam.nu
+<div data-ext="text"><pre><code># spam.nu
 
 export-env {
     let-env FOO = 'foo'
     let-env BAR = 'bar'
 }
-</code></pre></div><div><pre><code>> source-env spam.nu
+</code></pre></div><div data-ext="text"><pre><code>> source-env spam.nu
 
 > $env.FOO
 foo
@@ -783,7 +783,7 @@ In this release, we allowed <code>export</code> keywords to be used in scripts (
 <p><code>overlay add</code> and <code>overlay remove</code> are now renamed to <code>overlay use</code> and <code>overlay hide</code> (see the breaking changes later).</p>
 <p>The functionality of these commands remains largely the same with one change being that <code>overlay use</code> will now evaluate the <code>export-env { }</code> block.
 Consider this module:</p>
-<div><pre><code># spam.nu
+<div data-ext="text"><pre><code># spam.nu
 
 export-env {
     load-env {
@@ -795,11 +795,11 @@ export-env {
 export def foo [] { 'foo' }
 export alias bar = 'bar'
 </code></pre></div><p>instead of:</p>
-<div><pre><code>> source-env spam.nu
+<div data-ext="text"><pre><code>> source-env spam.nu
 
 > use spam.nu *
 </code></pre></div><p>you can do just:</p>
-<div><pre><code>> overlay use spam.nu
+<div data-ext="text"><pre><code>> overlay use spam.nu
 </code></pre></div><p>You can think of <code>overlay use</code> as calling <code>source-env</code> and <code>use</code> in one command and putting the result into a new overlay.</p>
 <h3 id="summary" tabindex="-1"> Summary</h3>
 <p>Here is a table that summarizes the changes:</p>
@@ -889,24 +889,24 @@ export alias bar = 'bar'
 </table>
 <h2 id="allow-parentheses-around-command-signatures-jt" tabindex="-1"> Allow parentheses around command signatures (<a href="https://github.com/nushell/nushell/pull/6444" target="_blank" rel="noopener noreferrer">JT</a>)</h2>
 <p>To bring more familiarity with other languages, we added the option to define command signatures with parentheses <code>()</code> instad of only braces <code>[]</code>:</p>
-<div><pre><code>def foo (x: int) { $x + 100 }
+<div data-ext="text"><pre><code>def foo (x: int) { $x + 100 }
 </code></pre></div><p>The square braces <code>[]</code> continue to work as well.
 This change is intended to test it with a larger audience to decide which one we prefer the most.</p>
 <h2 id="we-added-a-new-command-str-distance-which-implements-the-levenshtein-alorithm-fdncred" tabindex="-1"> We added a new command <code>str distance</code> which implements the Levenshtein alorithm <a href="https://github.com/nushell/nushell/pull/6383" target="_blank" rel="noopener noreferrer">fdncred</a></h2>
 <p>This example shows that the <code>edit distance</code> is one edit step difference using the Levenshtein algorithm.</p>
-<div><pre><code><span>></span> <span>'nushell'</span> <span>|</span> str distance <span>'nutshell'</span>
+<div data-ext="sh"><pre><code><span>></span> <span>'nushell'</span> <span>|</span> str distance <span>'nutshell'</span>
 ╭──────────┬───╮
 │ distance │ <span>1</span> │
 ╰──────────┴───╯
 </code></pre></div><p>We'd eventually like to add more similarity comparision functionality to nushell.</p>
 <h2 id="we-added-string-duration-conversion-to-named-durations-fdncred" tabindex="-1"> We added string duration conversion to named durations <a href="https://github.com/nushell/nushell/pull/6406" target="_blank" rel="noopener noreferrer">fdncred</a></h2>
 <p>The new parameter on <code>into duration</code> <code>--convert</code> allows you to convert from string durations into named durations.</p>
-<div><pre><code><span>></span> <span>'7min'</span> <span>|</span> into duration <span>--convert</span> sec
+<div data-ext="sh"><pre><code><span>></span> <span>'7min'</span> <span>|</span> into duration <span>--convert</span> sec
 <span>420</span> sec
 </code></pre></div><h2 id="external-completions-experimental-herlon214-rsteube" tabindex="-1"> External Completions (experimental) (<a href="https://github.com/nushell/nushell/pull/6295" target="_blank" rel="noopener noreferrer">herlon214, rsteube</a>)</h2>
 <p>In this release, we're trying out integrating Nushell with external completers, instead of relying solely on Nushell ones. It is possible to set the <code>external_completer</code> field in a config to be a block which will be evaluated if no Nushell completions were found. You can configure the block to run an external completer, such as <a href="https://github.com/rsteube/carapace" target="_blank" rel="noopener noreferrer">carapace</a>.</p>
 <p>This example should enable carapace external completions:</p>
-<div><pre><code># config.nu
+<div data-ext="text"><pre><code># config.nu
 let carapace_completer = {|spans|
     carapace $spans.0 nushell $spans | from json
 }
@@ -1054,7 +1054,7 @@ Today, we're releasing version 0.67 of Nu. This is release includes a new variab
 <h2 id="we-have-a-new-welcome-banner-fdncred" tabindex="-1"> We have a new welcome banner (<a href="https://github.com/nushell/nushell/pull/6163" target="_blank" rel="noopener noreferrer">fdncred</a>)</h2>
 <p><img src="@source/assets/images/0_67_header.png" alt="New Nushell banner"></p>
 <p>You can disable the banner using the <code>config nu</code> command to modify the config.nu file, just set <code>show_banner</code> to false:</p>
-<div><pre><code>let-env config {
+<div data-ext="text"><pre><code>let-env config {
     show_banner: false
     ...
 }
@@ -1068,12 +1068,12 @@ For example, a <code>--foo-bar</code> flag in a command signature will be refere
 <h2 id="relative-paths-in-scripts-are-file-relative-kubouch" tabindex="-1"> Relative paths in scripts are file-relative (<a href="https://github.com/nushell/nushell/pull/6150" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p>When you use <code>source</code>, <code>use</code>, or <code>overlay add</code> with a relative path in a script or a module file, the path is assumed to be relative to the file, not the current working directory.</p>
 <p>Example:</p>
-<div><pre><code># script.nu
+<div data-ext="text"><pre><code># script.nu
 
 use foo.nu *  # foo.nu is assumed to be relative to script.nu
 </code></pre></div><h2 id="writing-sqlite-files-fdncred" tabindex="-1"> Writing SQLite files (<a href="https://github.com/nushell/nushell/pull/6266" target="_blank" rel="noopener noreferrer">fdncred</a>)</h2>
 <p>We added a fun way to create SQLite databases:</p>
-<div><pre><code># create a database with a single table named `main`
+<div data-ext="text"><pre><code># create a database with a single table named `main`
 ls | into sqlite my_ls.db
 
 # same, but name the table `foo`
@@ -1101,7 +1101,7 @@ ls | into sqlite my_ls.db -t foo
 <code>hide</code> still retains this functionality, but in the future, we expect <code>hide</code> to be able to hide only parser definitions (commands and aliases).
 It is therefore recommended to change your <code>hide</code> calls to <code>hide-env</code> when dealing with environment variables.</p>
 <p>Unlike <code>hide</code>, <code>hide-env</code> has a slightly different signature: It accepts multiple arguments and the arguments can be constructed dynamically:</p>
-<div><pre><code>> load-env {
+<div data-ext="text"><pre><code>> load-env {
     ENV_FOO: 'foo'
     ENV_BAR: 'bar'
 }
@@ -1114,7 +1114,7 @@ It is therefore recommended to change your <code>hide</code> calls to <code>hide
 Sometimes, however, you might want them behind a prefix.
 That's what <code>--prefix</code> is for.
 Here is an example:</p>
-<div><pre><code>> module spam {
+<div data-ext="text"><pre><code>> module spam {
     export def foo [] { "foo" }
 }
 
@@ -1124,7 +1124,7 @@ Here is an example:</p>
 foo
 </code></pre></div><h2 id="customize-added-overlay-name-kubouch" tabindex="-1"> Customize Added Overlay Name (<a href="https://github.com/nushell/nushell/pull/6314" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p>You can now change the name of the added overlay using the new <code>as</code> keyword:</p>
-<div><pre><code>> module spam { export def foo [] { "foo" } }
+<div data-ext="text"><pre><code>> module spam { export def foo [] { "foo" } }
 
 > overlay add spam as eggs
 
@@ -1302,12 +1302,12 @@ Today, we're releasing version 0.65 of Nu. This release includes better support 
 <h2 id="unification-continues-elferherrera" tabindex="-1"> Unification continues (elferherrera)</h2>
 <p>In 0.65, we've also continued the process to unify commands for different datatypes. In this release, <code>db</code> and mysql support has simplified, bringing it closer to the already existing dataframe support.</p>
 <p>Before:</p>
-<div><pre><code>open myfile.db
+<div data-ext="text"><pre><code>open myfile.db
 | db select a
 | db from table_1
 | db where ((db col a) > 1 | db and ((db col a) &lt; 10))
 </code></pre></div><p>Now:</p>
-<div><pre><code>open myfile.db
+<div data-ext="text"><pre><code>open myfile.db
 | select a
 | from table_1
 | where ((field a) > 1 | and ((field a) &lt; 10))
@@ -1390,16 +1390,16 @@ Today, we're releasing version 0.64 of Nu. It's the first to include input overl
 <p>Commands can now declare their <a href="https://github.com/nushell/nushell/pull/5750" target="_blank" rel="noopener noreferrer">input and output types</a>. While this support is still initial and isn't yet available in the syntax, we're already using it for one important improvement: simplifying the commands.</p>
 <p>In this release, dataframe commands can now detect the input type in the pipeline and run without needing to be called with <code>dfr</code> before every command. The end result is much cleaner:</p>
 <p>Before:</p>
-<div><pre><code>> [[a b]; [1 2] [3 4]] | dfr to-df | dfr drop a
+<div data-ext="text"><pre><code>> [[a b]; [1 2] [3 4]] | dfr to-df | dfr drop a
 </code></pre></div><p>After:</p>
-<div><pre><code>> [[a b]; [1 2] [3 4]] | to-df | drop a
+<div data-ext="text"><pre><code>> [[a b]; [1 2] [3 4]] | to-df | drop a
 </code></pre></div><p>This allows dataframe commands to feel more natural and fit more cleanly in with other commands. We're also looking to make similar improvements to the <code>db</code> command. In the future, you'll be able to open a data source and then use the standard nushell commands against it, and Nushell will select the best fit based on the type of data source you're opening.</p>
 <h2 id="lazy-dataframes-elferherrera" tabindex="-1"> Lazy dataframes (elferherrera)</h2>
 <p>Dataframes now have <a href="https://github.com/nushell/nushell/pull/5687" target="_blank" rel="noopener noreferrer">lazy operations</a>. These lazy operations allow users to build up multiple steps of a pipeline and execute them in a much more efficient way against the dataframe.</p>
 <h2 id="future-sqlite-backed-history-phiresky" tabindex="-1"> Future SQLite backed history (phiresky)</h2>
 <p>The API for storing history entries has changed in the background. This now supports also storing your history in a SQLite database. Currently this adds some metadata such as the current working directory, whether a command succeeded, and execution times. In the future this will enable you to query the history in a more rich and meaningful way.</p>
 <p>Currently the simple text based history is still the default. If you want to test out the new history change your config to contain:</p>
-<div><pre><code>let-env config = {
+<div data-ext="text"><pre><code>let-env config = {
   ...
   history_file_format: "sqlite" # "sqlite" or "plaintext"
   ...
@@ -1500,7 +1500,7 @@ Today, we're releasing version 0.63 of Nu. This release is the first to include 
 <h2 id="overlays-kubouch" tabindex="-1"> Overlays (kubouch)</h2>
 <p>We've added a new concept into this release that merges a few of our previous design ideas together: overlays. You can think of overlays like layers in a paint program. They work together to give you a set of commands, environment variables, and more that you can turn on and off as needed.</p>
 <p>For example, we can create an overlay to work in:</p>
-<div><pre><code>(zero) > module code { export env BAZ { "baz" } }
+<div data-ext="text"><pre><code>(zero) > module code { export env BAZ { "baz" } }
 (zero) > overlay add code
 (code) > $env.BAZ
 baz
@@ -1513,7 +1513,7 @@ bagr
 <h2 id="hooks-jt" tabindex="-1"> Hooks (jt)</h2>
 <p>Starting with 0.63, you can now set up hooks that will run code under certain conditions. These hooks run after your code has finished evaluating.</p>
 <p>Let's look first at how to set up the hooks, and then see what the hooks output. To set up a hook, you pick the kind of hook and then configure a block of code to run when that hook fires:</p>
-<div><pre><code>hooks: {
+<div data-ext="text"><pre><code>hooks: {
     pre_prompt: [{
         print "pre_prompt hook"
     }]
@@ -1527,7 +1527,7 @@ bagr
     }
 }
 </code></pre></div><p>Using this example, we can watch the hooks fire:</p>
-<div><pre><code>/home/jt/Source/nushell〉cd ..
+<div data-ext="text"><pre><code>/home/jt/Source/nushell〉cd ..
 pre_execution hook
 pre_prompt hook
 PWD environment variable changed from /home/jt/Source/nushell to /home/jt/Source
@@ -1540,7 +1540,7 @@ PWD environment variable changed from /home/jt/Source/nushell to /home/jt/Source
 <ul>
 <li>(Returned from the engine rewrite) <code>histogram</code> for checking distributions right inside nushell (WindSoilder)</li>
 <li><code>config nu</code> and <code>config env</code> to easily edit your nushell configuration files with your editor of choice (Kangaxx-0/vFrankZhang)</li>
-<li><code>str title-case</code> (krober)<div><pre><code>> 'this is a test case' | str title-case
+<li><code>str title-case</code> (krober)<div data-ext="text"><pre><code>> 'this is a test case' | str title-case
 This Is A Test Case
 </code></pre></div></li>
 <li>Many new <code>db</code> subcommands (elferherrera)</li>
@@ -1561,7 +1561,7 @@ This Is A Test Case
 </li>
 <li>
 <p><code>cd</code> accepts abreviation of paths to quickly jump to nested directories based on unique prefixes (fdncred)</p>
-<div><pre><code>> $env.PWD
+<div data-ext="text"><pre><code>> $env.PWD
 ~/some/path
 > cd d/s/9
 > $env.PWD
@@ -1697,16 +1697,16 @@ Today, we're releasing version 0.62 of Nu. This release deeper integration with 
 <h1 id="database-connectivity-rgwood-elferherrera-fdncred" tabindex="-1"> Database connectivity (rgwood, elferherrera, fdncred)</h1>
 <p>A gap in the &quot;Nushell story&quot; up to this point has been that although Nushell is a language and shell focused on data, there wasn't yet any ability to query databases and work with their data. With 0.62, we take our first step in that direction.</p>
 <p>New in this release is the <code>db</code> command, which allows you to connect to a SQLite database and create a SQL query to run on it:</p>
-<div><pre><code>  > db open db.sqlite
+<div data-ext="text"><pre><code>  > db open db.sqlite
     | db from table_a
     | db select a
     | db limit 10
     | db describe
 </code></pre></div><p>With the <code>db open</code> command we open a connection to the database, then subsequent <code>db</code> commands build up a query step by step. One new twist with <code>db</code> for Nushell is that the query is built lazily, and will only be run once the data is needed.</p>
 <p>Queries can also be written as raw SQL:</p>
-<div><pre><code>  > db open db.sqlite | db query "SELECT a FROM table_a LIMIT 10"
+<div data-ext="text"><pre><code>  > db open db.sqlite | db query "SELECT a FROM table_a LIMIT 10"
 </code></pre></div><p>And finally, the <code>open</code> command has been updated to be SQLite-aware:</p>
-<div><pre><code>  > open db.sqlite
+<div data-ext="text"><pre><code>  > open db.sqlite
 </code></pre></div><p>In all of the queries above, <code>db open db.sqlite</code> could be replaced by <code>open db.sqlite</code>; <code>open</code> is able to detect databases by looking at file contents.</p>
 <h1 id="full-translation-of-the-book-to-chinese-hustcer" tabindex="-1"> Full translation of the book to Chinese (hustcer)</h1>
 <p>The book is now fully translated to <a href="https://www.nushell.sh/zh-CN/book/" target="_blank" rel="noopener noreferrer">Chinese (zh-CN)</a>. Huge shout-out to hustcer for doing all the work on the translation!</p>
@@ -1971,7 +1971,7 @@ Today, we're releasing a beta release of 0.60 of Nu. This is an enormous release
 <h1 id="custom-completions" tabindex="-1"> Custom completions</h1>
 <p><img src="@source/assets/images/0_60_completions.gif" alt="Custom completions for git and winget"></p>
 <p>Let's start with Nushell's most-requested feature: custom completions. The long-awaited, long-requested feature of having nice completions is finally here. With 0.60, you'll be able to write scripts that help you complete parameters and flag values. Let's take a look at an example. When you create a new config, you'll see a section like this:</p>
-<div><pre><code># This is a simplified version of completions for git branches and git remotes
+<div data-ext="text"><pre><code># This is a simplified version of completions for git branches and git remotes
 def "nu-complete git branches" [] {
   ^git branch | lines | each { |line| $line | str find-replace '\* ' '' | str trim }
 }
@@ -1980,7 +1980,7 @@ def "nu-complete git remotes" [] {
   ^git remote | lines | each { |line| $line | str trim }
 }
 </code></pre></div><p>To call these function at the right time, we need to tell Nushell which parameter can complete with them.</p>
-<div><pre><code>extern "git checkout" [
+<div data-ext="text"><pre><code>extern "git checkout" [
   branch?: string@"nu-complete git branches" # name of the branch to checkout
   -b: string                                 # create and checkout a new branch
   -B: string                                 # create/reset and checkout a branch
@@ -2000,14 +2000,14 @@ def "nu-complete git remotes" [] {
 <p>There's quite a list of changes to the language itself. Let's talk about each one to help you transition to the new Nushell:</p>
 <h2 id="escape-characters-in-strings" tabindex="-1"> Escape characters in strings</h2>
 <p>With 0.60, Nushell now divides strings into two types: strings with escape characters and strings without. The escaping case is written with double-quotes (<code>&quot;</code>) and the non-escaping case is written with single-quotes (<code>'</code>):</p>
-<div><pre><code>> "hello\nworld"
+<div data-ext="text"><pre><code>> "hello\nworld"
 hello
 world
 > 'hello\nworld'
 hello\nworld
 </code></pre></div><p>Nushell will prefer the single-quotes for things like path names that include spaces, allowing you to naturally write paths for Windows as well.</p>
 <p>The difference in double-quoted and single-quoted strings also extends to interpolated strings (<code>$&quot;&quot;</code> and <code>$''</code>):</p>
-<div><pre><code>> let x = 100
+<div data-ext="text"><pre><code>> let x = 100
 > $"value is:\n($x)"
 value is:
 100
@@ -2017,14 +2017,14 @@ value is:\n100
 <p>The 0.60 release also brings with it a number of new value forms.</p>
 <h3 id="records" tabindex="-1"> Records</h3>
 <p>You now can write a record, or a list of key/value pairs, as a native data type in Nushell:</p>
-<div><pre><code>> {name: "Bob", age: 10}
+<div data-ext="text"><pre><code>> {name: "Bob", age: 10}
 ╭──────┬─────╮
 │ name │ Bob │
 │ age  │ 10  │
 ╰──────┴─────╯
 </code></pre></div><h3 id="table-as-a-list-of-records" tabindex="-1"> Table as a list of records</h3>
 <p>With the introduction of records, a second way to define a table is a list (or stream) of records:</p>
-<div><pre><code>> seq 3 | each { |x| { name: Bob, x: $x } }
+<div data-ext="text"><pre><code>> seq 3 | each { |x| { name: Bob, x: $x } }
   #   name   x
 ────────────────
   0   Bob    1
@@ -2036,7 +2036,7 @@ value is:\n100
 <p>Likewise, we're moving away from 'bigdecimal' to signed 64-bit float values.</p>
 <h3 id="dates" tabindex="-1"> Dates</h3>
 <p>Earlier versions of Nushell supported dates as a value type, but they lacked a way to write them. You can now write a date literal in one of three ways:</p>
-<div><pre><code># A date
+<div data-ext="text"><pre><code># A date
 > 2022-02-02
 
 # A date and time, assuming UTC
@@ -2047,7 +2047,7 @@ value is:\n100
 </code></pre></div><p>These come from the <a href="https://datatracker.ietf.org/doc/html/rfc3339" target="_blank" rel="noopener noreferrer">RFC 3339</a> standard for datetime formats.</p>
 <h3 id="binary-data" tabindex="-1"> Binary data</h3>
 <p>Like dates, earlier versions of Nushell also supported binary data but there was no way to write a binary data literal. You're now able to write them using the <code>0x[...]</code> form:</p>
-<div><pre><code>> 0x[11 ff]
+<div data-ext="text"><pre><code>> 0x[11 ff]
 Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 00000000:   11 ff                                                •×
 </code></pre></div><p>Spaces and commas are optional in this form, letting you separate write them however is best for readability.</p>
@@ -2056,17 +2056,17 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 <p>The dataframe support in 0.60 uses this feature.</p>
 <h2 id="if-meet-else" tabindex="-1"> if, meet else</h2>
 <p>We've improved the syntax of Nushell in a few key places. Previously, in 0.44 you'd write:</p>
-<div><pre><code>> if $x &lt; 3 { echo "true!" } { echo "false" }
+<div data-ext="text"><pre><code>> if $x &lt; 3 { echo "true!" } { echo "false" }
 </code></pre></div><p>This not only felt inelegant, but was prone to errors as people would want to leave off the second block when they didn't need it or just naturally want to type <code>else</code>.</p>
 <p>This led to a new concept in Nushell: the keyword shape. Shapes in Nushell are a way for commands to tell the parser what the shape of their parameters are. In turn, the parser will use this knowledge to parse the arguments before they're given to the command (and also to do completions and early errors). With this, <code>else</code> is now one of the new keyword shapes, allowing it to take an expression that follows.</p>
 <p>Taken together, in 0.60 we can now not only write the above like this:</p>
-<div><pre><code>if $x &lt; 3 {
+<div data-ext="text"><pre><code>if $x &lt; 3 {
   echo "true!"
 } else {
   echo "false"
 }
 </code></pre></div><p>We can also string together multiple if/else:</p>
-<div><pre><code>if $x &lt; 3 {
+<div data-ext="text"><pre><code>if $x &lt; 3 {
   echo "less than three"
 } else if $x &lt; 10 {
   echo "less than ten
@@ -2081,7 +2081,7 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 <p>You can now use <code>get</code>, <code>skip</code>, and <code>first</code> on binary data to reach the bytes you'd like to work with. We're exploring extending this further so that it becomes easier to explore your binary data just like your text data.</p>
 <h2 id="structured-environment" tabindex="-1"> Structured environment</h2>
 <p>Inside of Nu, the environment can now hold any kind of structured value. For example, opening the <code>PATH</code> environment variable now might look like this in macOS:</p>
-<div><pre><code>> $env.PATH
+<div data-ext="text"><pre><code>> $env.PATH
 ╭───┬─────────────────────────────────╮
 │ 0 │ /opt/homebrew/opt/openssl@3/bin │
 │ 1 │ /opt/homebrew/bin               │
@@ -2093,17 +2093,17 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 │ 7 │ /sbin                           │
 ╰───┴─────────────────────────────────╯
 </code></pre></div><p>This allows you to more easily add and update to the environment. For example, we can add a new entry to the PATH:</p>
-<div><pre><code>> let-env PATH = ($env.PATH | prepend '/my/path')
+<div data-ext="text"><pre><code>> let-env PATH = ($env.PATH | prepend '/my/path')
 </code></pre></div><p>Environment variables that aren't strings can be converted to strings automatically using the new <code>ENV_CONVERSIONS</code> environment variable.</p>
 <h2 id="scoped-cd" tabindex="-1"> Scoped <code>cd</code></h2>
 <p>In this release, we're also moving to keeping the current directory in the environment as <code>$env.PWD</code>. This leads to a few interesting twists in the design. For one, this means that <code>cd</code> is now scoped to the block you're currently in.</p>
-<div><pre><code>> cd ./foo
+<div data-ext="text"><pre><code>> cd ./foo
 ./foo> do { cd ./bar }
 ./foo>
 </code></pre></div><p>This allows you to more easily loop over subdirectories without having to do the bookkeeping of remembering to change back to the previous directory:</p>
-<div><pre><code>> ls | where type == dir | each { |it| cd $it.name; ls | length }
+<div data-ext="text"><pre><code>> ls | where type == dir | each { |it| cd $it.name; ls | length }
 </code></pre></div><p>That said, it takes a little getting used to. It does mean that changing a directory in a traditional custom command won't work, as the <code>PWD</code> environment variable will reset after the call completes. To help with this, we're also introducing <code>def-env</code>, a way to work inside the caller's environment and not lose any environment changes made by the custom command:</p>
-<div><pre><code>> def-env my-cd [path] {
+<div data-ext="text"><pre><code>> def-env my-cd [path] {
   cd $path
 }
 
@@ -2113,7 +2113,7 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 <p>With this release, we've simplified the commands for working with tables. The two fundamental commands are now: <code>select</code> and <code>get</code>.</p>
 <h3 id="select-ing-data" tabindex="-1"> <code>Select</code>-ing data</h3>
 <p>The <code>select</code> command allows you to keep the structure of what you're working on and reduce it to only the part you want. For example, just as before you can pass <code>select</code> to get a column:</p>
-<div><pre><code>> ls | select name
+<div data-ext="text"><pre><code>> ls | select name
 ╭────┬───────────────────╮
 │ #  │       name        │
 ├────┼───────────────────┤
@@ -2125,7 +2125,7 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 │  5 │ blog              │
 ...
 </code></pre></div><p>You can now also use <code>select</code> on rows, by passing in a row number:</p>
-<div><pre><code>> ls | select 1
+<div data-ext="text"><pre><code>> ls | select 1
 ╭───┬─────────────────┬──────┬───────┬────────────╮
 │ # │      name       │ type │ size  │  modified  │
 ├───┼─────────────────┼──────┼───────┼────────────┤
@@ -2134,7 +2134,7 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 </code></pre></div><h3 id="get-ing-data" tabindex="-1"> <code>Get</code>-ing data</h3>
 <p>The other fundamental command for working with tables is <code>get</code>. Like <code>select</code>, <code>get</code> allows you to work with columns and rows in a table, or fields in a record. Unlike <code>select</code>, the <code>get</code> command extracts data out of the table and does not try to preserve its original form. This is helpful when you want to get at the cell data itself.</p>
 <p>Via a column:</p>
-<div><pre><code>> ls | get name
+<div data-ext="text"><pre><code>> ls | get name
 ╭────┬───────────────────╮
 │  0 │ CNAME             │
 │  1 │ CONTRIBUTING.md   │
@@ -2144,7 +2144,7 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 │  5 │ blog              │
 ...
 </code></pre></div><p>Via a row:</p>
-<div><pre><code>> ls | get 1
+<div data-ext="text"><pre><code>> ls | get 1
 ╭──────────┬─────────────────╮
 │ name     │ CONTRIBUTING.md │
 │ type     │ file            │
@@ -2153,16 +2153,16 @@ Length: 2 (0x2) bytes | printable whitespace ascii_other non_ascii
 ╰──────────┴─────────────────╯
 </code></pre></div><p>You'll notice that getting rows out of a table with columns gives you back a record. You can think of a table as a list of records.</p>
 <p>You can combine working with rows and columns together into a &quot;cell path&quot;, a way of reaching the data you want. If we only wanted to get the cell's data in row 1, column &quot;size&quot;, we can do:</p>
-<div><pre><code>> ls | get size.1
+<div data-ext="text"><pre><code>> ls | get size.1
 </code></pre></div><h2 id="new-pipeline-syntax-form" tabindex="-1"> New pipeline syntax form</h2>
 <p>When writing scripts in Nushell, often folks want to be able to build up a pipeline and line up all the pipes on the left. This is now supported in scripts:</p>
-<div><pre><code>ls
+<div data-ext="text"><pre><code>ls
 | where size > 10kb
 | length
 </code></pre></div><h2 id="default-params" tabindex="-1"> Default params</h2>
 <p>A common request as more people tried Nushell was &quot;can we have default values for parameters&quot;. Thanks to the work on the new parser, we can!</p>
 <p>Now, you're able to set a default value for any optional parameter in your command:</p>
-<div><pre><code>def add-maybe-hundred [x:int, y = 100] {
+<div data-ext="text"><pre><code>def add-maybe-hundred [x:int, y = 100] {
   $x + $y
 }
 
@@ -2171,14 +2171,14 @@ let twelve_squared = add-maybe-hundred 44
 <h2 id="stdout-stderr-and-exit-codes" tabindex="-1"> Stdout, stderr, and exit codes</h2>
 <p>In previous versions of Nushell, you generally had easy access to the stdout of an external command. You could run it, and then create a pipe and work with its output. If you wanted to work with stderr or get its exit code, you didn't have an easy way to do it.</p>
 <p>With 0.60, we've introduced the <code>complete</code> command. Running an external command and then pipeline it to <code>complete</code> runs the external to completion and then gives you the stdout, stderr, and exit code of that external.</p>
-<div><pre><code>> cat CNAME | complete
+<div data-ext="text"><pre><code>> cat CNAME | complete
 ╭───────────┬────────────────╮
 │ stdout    │ www.nushell.sh │
 │ stderr    │                │
 │ exit_code │ 0              │
 ╰───────────┴────────────────╯
 </code></pre></div><p>To redirect stderr, you can call through <code>do -i</code>. For example, let's say we're calling <code>cat</code> again, this time with a file that doesn't exist:</p>
-<div><pre><code>> do -i { cat unknown.txt } | complete
+<div data-ext="text"><pre><code>> do -i { cat unknown.txt } | complete
 ╭───────────┬─────────────────────────────────────────────╮
 │ stdout    │                                             │
 │ stderr    │ cat: unknown.txt: No such file or directory │
@@ -2187,7 +2187,7 @@ let twelve_squared = add-maybe-hundred 44
 </code></pre></div><p>You can also access the last exit code via <code>$env.LAST_EXIT_CODE</code>.</p>
 <h2 id="modules" tabindex="-1"> Modules</h2>
 <p>With 0.60, you're now able to create your own modules, allowing you to grow to larger projects with clean interfaces between files. A module can be written either using the <code>module</code> keyword:</p>
-<div><pre><code>module greetings {
+<div data-ext="text"><pre><code>module greetings {
   export def greet [] {
     print "hello!"
   }
@@ -2196,7 +2196,7 @@ let twelve_squared = add-maybe-hundred 44
 use greetings greet
 greet
 </code></pre></div><p>You can also make modules from whole files. We can rewrite the above using a separate file:</p>
-<div><pre><code># greetings.nu
+<div data-ext="text"><pre><code># greetings.nu
 export def greet [] {
   print "hello!"
 }
@@ -2207,7 +2207,7 @@ greet
 </code></pre></div><p>Modules allow you to <code>export</code> custom commands and environment variables to be used in other places.</p>
 <h2 id="make-your-own-errors" tabindex="-1"> Make your own errors</h2>
 <p>You can also create your own error messages in your custom commands and send these back to the user if they call your command in the wrong way. For example, let's say you wanted to require that the user pass in a value between 1 and 10:</p>
-<div><pre><code>> def one-to-ten [x: int] {
+<div data-ext="text"><pre><code>> def one-to-ten [x: int] {
     let span = (metadata $x).span
     if $x > 10 || $x &lt; 1 {
       error make {
@@ -2283,7 +2283,7 @@ Error:
 <h2 id="better-multiline-editing" tabindex="-1"> Better multiline editing</h2>
 <p><img src="@source/assets/images/0_59_1_for_multiline_indicator.png" alt="Multiline editing"></p>
 <p>With the switch to reedline, you can also get better feedback when working on multiline edits. For example, moving to the next line, you'll now see <code>:::</code> by default preceding the extended input:</p>
-<div><pre><code>> do {
+<div data-ext="text"><pre><code>> do {
 ::: echo "hello"
 ::: echo "world"
 ::: }
@@ -2295,7 +2295,7 @@ world
 <p><img src="@source/assets/images/0_59_1_ls_gridc.png" alt="Grid file listing"></p>
 <h2 id="better-less-support" tabindex="-1"> Better <code>less</code> support</h2>
 <p>With Nushell, you can now pipe to your preferred pager, and get a page-able output. For example, if you wanted to look at a long table, you can pipe into the <code>less</code> command (or the equivalent for your OS):</p>
-<div><pre><code>> ls **/* | less
+<div data-ext="text"><pre><code>> ls **/* | less
 </code></pre></div><p>Nushell by default will strip the ANSI colors, letting you look at the data with most pagers.</p>
 <h2 id="miette" tabindex="-1"> Miette</h2>
 <p>We're moving to a new error reporter called <a href="https://github.com/zkat/miette" target="_blank" rel="noopener noreferrer">miette</a>. It's an attractive way of showing errors back while you're working in the REPL or on scripts.</p>
@@ -2318,7 +2318,7 @@ history item or you could just simply navigate the menu until you find what you 
 <h2 id="new-keybindings" tabindex="-1"> New Keybindings</h2>
 <p>Now you can define complex keybindings for nushell. For example, say you have changed your config file and
 want to reload it in your nushell session. You can create a special keybinding to help reload your config file:</p>
-<div><pre><code>{
+<div data-ext="text"><pre><code>{
     name: reload_config
     modifier: none
     keycode: f5
@@ -2332,7 +2332,7 @@ want to reload it in your nushell session. You can create a special keybinding t
 <h1 id="introducing-nuon" tabindex="-1"> Introducing 'nuon'</h1>
 <p>As the syntax for Nushell has continued to grow and evolve, we noticed that writing data in Nushell was kinda fun. The more we played with it, the more the idea grew that we could create a data file format using the Nushell syntax for data. Thus, 'nuon' was born. With it, we now include <code>from nuon</code> and <code>to nuon</code> to help you work with the new .nuon files.</p>
 <p>Nuon is a superset of JSON, allowing you to pass JSON files and parse them as Nuon. Additionally, Nuon supports the data forms from Nushell, including compact tables, durations, filesizes, and more.</p>
-<div><pre><code># sample.nuon
+<div data-ext="text"><pre><code># sample.nuon
 [
     # The nuon compact table format
     [[a, nuon, table]; [1, 2, 3], [4, 5, 6]],
@@ -2467,12 +2467,12 @@ want to reload it in your nushell session. You can create a special keybinding t
 <h2 id="going-parallel" tabindex="-1"> Going parallel</h2>
 <p>The new engine has a fun trick up it's sleeve: you can effortlessly convert your scripts to run in parallel by changing <code>each</code> calls to <code>par-each</code>.</p>
 <p>For example, if we had a script that opened files that fit a certain pattern and counted their number of lines:</p>
-<div><pre><code>ls **/*.rs | each { |it|
+<div data-ext="text"><pre><code>ls **/*.rs | each { |it|
   let num_lines = (open $it.name | lines | length)
   {name: $it.name, loc: $num_lines}
 }
 </code></pre></div><p>We can turn this into a script that runs in parallel by changing the <code>each</code> to <code>par-each</code>:</p>
-<div><pre><code>ls **/*.rs | par-each { |it|
+<div data-ext="text"><pre><code>ls **/*.rs | par-each { |it|
   let num_lines = (open $it.name | lines | length)
   {name: $it.name, loc: $num_lines}
 }
@@ -2498,11 +2498,11 @@ want to reload it in your nushell session. You can create a special keybinding t
 <h1 id="new-plugin-architecture" tabindex="-1"> New plugin architecture</h1>
 <p>Rather that scanning for all new plugins on startup like we did with 0.44 (and taking ages to start Nu), the new <code>register</code> command stores the
 location and signature of your plugins, making it easier to load at start up.</p>
-<div><pre><code>> register -e json ~/.cargo/bin/nu_plugin_extra_query
+<div data-ext="text"><pre><code>> register -e json ~/.cargo/bin/nu_plugin_extra_query
 </code></pre></div><p>Also, the new plugin architecture is now multi-protocol, allowing you to pick the right protocol for your plugin. We currently support json and have experimental support for capnp.</p>
 <p>By the way, you are not limited to write plugins in Rust. You can even create a python script and use it as a Nushell plugin. You only need to
 specify what command should be used to run the plugin</p>
-<div><pre><code>> register -e json -s python ~/my_plugins/plugin.py
+<div data-ext="text"><pre><code>> register -e json -s python ~/my_plugins/plugin.py
 </code></pre></div><p>Nushell now has three optional plugins (all using 'json' serialization):</p>
 <ul>
 <li><code>inc</code>: a value/version incrementor</li>
@@ -2672,7 +2672,7 @@ specify what command should be used to run the plugin</p>
 <p>You can find out more on <a href="https://github.com/nushell/nushell/issues/4305" target="_blank" rel="noopener noreferrer">the full breaking changes list</a>.</p>
 <h1 id="acknowledgements" tabindex="-1"> Acknowledgements</h1>
 <p>A big &quot;thank you!&quot; to everyone who helped us build this version of Nushell!</p>
-<div><pre><code>╭────┬─────────────────────────────────╮
+<div data-ext="text"><pre><code>╭────┬─────────────────────────────────╮
 │  0 │ Access                          │
 │  1 │ adamijak                        │
 │  2 │ ahkrr                           │
@@ -2798,12 +2798,12 @@ Today, we're releasing a beta release of 0.60 of Nu. This is to get early feedba
 <h1 id="new-plugin-architecture" tabindex="-1"> New plugin architecture</h1>
 <p>The new plugin architecture is now multi-protocol, allowing you to pick the right protocol for your plugin. We currently support json and capnp.</p>
 <p>Rather that scanning for all new plugins on startup like we did with 0.44, there is also a new <code>register</code> command you use a plugin for use:</p>
-<div><pre><code>> register -e capnp ~/.cargo/bin/nu_plugin_extra_query
+<div data-ext="text"><pre><code>> register -e capnp ~/.cargo/bin/nu_plugin_extra_query
 </code></pre></div><h1 id="and-more" tabindex="-1"> And more</h1>
 <p>We're still hard at work finishing up the 0.60 release, and we're excited to tell you everything it can do. You'll notice some new chapters in the <a href="https://www.nushell.sh/book/" target="_blank" rel="noopener noreferrer">book</a> on some of these, including: support for exit codes, better stderr support, new language literals for dates and binary data, a whole new line editor with an improved interface, and much more.</p>
 <h1 id="one-more-thing" tabindex="-1"> One more thing</h1>
 <p>Before we go, we thought we should mention that Nushell now supports completions for external commands. When you first start up nushell, you'll notice that it asks if you want to create a default configuration. If you say yes, and look at the file, you'll see a few of these:</p>
-<div><pre><code>def "nu-complete git branches" [] {
+<div data-ext="text"><pre><code>def "nu-complete git branches" [] {
   ^git branch | lines | each { |line| $line | str find-replace "\* " "" | str trim }
 }
 
@@ -2988,7 +2988,7 @@ Today, we're releasing 0.40 of Nu. This release is includes better table imports
 <h2 id="detecting-columns-jt" tabindex="-1"> Detecting columns (jt)</h2>
 <p>Nushell now supports a new command: <code>detect columns</code>. This command is intended as an easy way to handle tabular data that's written as text. Commands like <code>ps</code>, <code>ls -l</code>, <code>netstat</code>, <code>df</code>, and others commonly output their output as text. With <code>detect columns</code>, you can run the external command, and convert them into Nushell's tabular data format.</p>
 <p>Let's look at an example:</p>
-<div><pre><code>> df
+<div data-ext="text"><pre><code>> df
 Filesystem     1K-blocks      Used Available Use% Mounted on
 udev             8108824         0   8108824   0% /dev
 tmpfs            1631284      2068   1629216   1% /run
@@ -3000,7 +3000,7 @@ tmpfs            8156408         0   8156408   0% /sys/fs/cgroup
 tmpfs            1631280       128   1631152   1% /run/user/1000
 /dev/nvme0n1p2 238810780 136867812  89742316  61% /media/jt/Data
 </code></pre></div><p>The <code>df</code> command comes with most Unix-based systems and prints out a table of data for each of the devices on the system. Let's turn this into a table we can work with in Nushell:</p>
-<div><pre><code>> df | detect columns
+<div data-ext="text"><pre><code>> df | detect columns
 ───┬────────────────┬───────────┬───────────┬───────────┬──────┬────────────────┬────────────────
  # │   Filesystem   │ 1K-blocks │   Used    │ Available │ Use% │    Mounted     │       on
 ───┼────────────────┼───────────┼───────────┼───────────┼──────┼────────────────┼────────────────
@@ -3015,7 +3015,7 @@ tmpfs            1631280       128   1631152   1% /run/user/1000
  8 │ /dev/nvme0n1p2 │ 238810780 │ 136867812 │ 89742316  │ 61%  │ /media/jt/Data │ /media/jt/Data
 ───┴────────────────┴───────────┴───────────┴───────────┴──────┴────────────────┴────────────────
 </code></pre></div><p>Ahh, that's close to what we want in just one step. Let's go ahead and clean this up a little. First, let's drop that last column. &quot;Mounted on&quot; being two words confused the importer, but all the data is there, we just need to drop the last column.</p>
-<div><pre><code>> df | detect columns | drop column
+<div data-ext="text"><pre><code>> df | detect columns | drop column
 ───┬────────────────┬───────────┬───────────┬───────────┬──────┬────────────────
  # │   Filesystem   │ 1K-blocks │   Used    │ Available │ Use% │    Mounted
 ───┼────────────────┼───────────┼───────────┼───────────┼──────┼────────────────
@@ -3030,7 +3030,7 @@ tmpfs            1631280       128   1631152   1% /run/user/1000
  8 │ /dev/nvme0n1p2 │ 238810780 │ 136867812 │ 89742316  │ 61%  │ /media/jt/Data
 ───┴────────────────┴───────────┴───────────┴───────────┴──────┴────────────────
 </code></pre></div><p>Finally, it'd be nice to be able to have real file sizes for the middle columns, so let's convert the numbers into Nushell's filesize type:</p>
-<div><pre><code>> df | detect columns | drop column | into filesize 1K-blocks Used Available
+<div data-ext="text"><pre><code>> df | detect columns | drop column | into filesize 1K-blocks Used Available
 ───┬────────────────┬───────────┬──────────┬───────────┬──────┬────────────────
  # │   Filesystem   │ 1K-blocks │   Used   │ Available │ Use% │    Mounted
 ───┼────────────────┼───────────┼──────────┼───────────┼──────┼────────────────
@@ -3045,7 +3045,7 @@ tmpfs            1631280       128   1631152   1% /run/user/1000
  8 │ /dev/nvme0n1p2 │  238.8 MB │ 136.9 MB │   89.7 MB │ 61%  │ /media/jt/Data
 ───┴────────────────┴───────────┴──────────┴───────────┴──────┴────────────────
 </code></pre></div><p>In just a couple steps, we've converted the text-based table into tabular data we can use just like any other Nushell command. To make this easy to do in the future, we can alias <code>df</code> to do these steps:</p>
-<div><pre><code>> alias df = (^df | detect columns | drop column | into filesize 1K-blocks Used Available)
+<div data-ext="text"><pre><code>> alias df = (^df | detect columns | drop column | into filesize 1K-blocks Used Available)
 </code></pre></div><h2 id="smaller-binaries-fdncred" tabindex="-1"> Smaller binaries (fdncred)</h2>
 <p>The size of the Nushell release binaries has come up as regular feedback from Nushell users. &quot;Why does the shell have to be so big?&quot; And we've heard you!</p>
 <p>Today's release now uses a combination of <code>strip</code> and <code>upx</code> to bring considerable savings in binary size. The Linux release (plugins incl.) has dropped from 475mb to 58mb(!!), making it <strong>88% smaller</strong>. We're seeing similar improvements in the sizes of the macOS and Windows releases.</p>
@@ -3228,7 +3228,7 @@ Today, we're releasing 0.36 of Nu. This release fixes some long-standing issues 
 <h1 id="what-s-new" tabindex="-1"> What's New</h1>
 <h2 id="help-now-has-search-fdncred" tabindex="-1"> Help now has search (fdncred)</h2>
 <p>You can now use <code>help -f &lt;term&gt;</code> and search the help for text. This can come in handy if you know roughly what you want but can't remember the name of the command:</p>
-<div><pre><code>> help -f string
+<div data-ext="text"><pre><code>> help -f string
 ────┬──────────────────────────┬────────────────────────────────────────────────┬─────────────
  #  │           name           │                     usage                      │ extra_usage
 ────┼──────────────────────────┼────────────────────────────────────────────────┼─────────────
@@ -3423,9 +3423,9 @@ Today, we're releasing 0.34 of Nu. This release is the first to support datafram
 <h2 id="dataframes-elferherrera" tabindex="-1"> Dataframes (elferherrera)</h2>
 <p>With 0.34, we've introduced a new family of commands to work with dataframes. Dataframes are an efficient way of working with large datasets by storing data as columns and offering a set of operations over them.</p>
 <p>To create a dataframe, you can use the <code>dataframe open</code> command and pass it a source file to load. This command currently supports CSV and parquet files.</p>
-<div><pre><code>> let df = (dataframe open .\Data7602DescendingYearOrder.csv)
+<div data-ext="text"><pre><code>> let df = (dataframe open .\Data7602DescendingYearOrder.csv)
 </code></pre></div><p>Once loaded, there are a variety of commands you can use to interact with the dataframe (you can get the full list with <code>dataframe --help</code>). For example, to see the first few rows of the dataframe we just loaded, we can use <code>dataframe first</code>:</p>
-<div><pre><code>> $df | dataframe first
+<div data-ext="text"><pre><code>> $df | dataframe first
 
 ───┬──────────┬─────────┬──────┬───────────┬──────────
  # │ anzsic06 │  Area   │ year │ geo_count │ ec_count
@@ -3438,11 +3438,11 @@ Today, we're releasing 0.34 of Nu. This release is the first to support datafram
 ───┴──────────┴─────────┴──────┴───────────┴──────────
 </code></pre></div><p>Where dataframes really shine is their performance.</p>
 <p>For example, the above dataset is 5 columns and ~5.5 million rows of data. We're able to process group it by the year column, sum the results, and display it to the user in 557ms:</p>
-<div><pre><code># process.nu
+<div data-ext="text"><pre><code># process.nu
 let df = (dataframe open Data7602DescendingYearOrder.csv)
 let res = ($df | dataframe group-by year | dataframe aggregate sum | dataframe select geo_count)
 $res
-</code></pre></div><div><pre><code>> benchmark {source process.nu}
+</code></pre></div><div data-ext="text"><pre><code>> benchmark {source process.nu}
 
 ───┬───────────────────
  # │     real time
@@ -3450,12 +3450,12 @@ $res
  0 │ 557ms 658us 500ns
 ───┴───────────────────
 </code></pre></div><p>By comparison, here's the same example in pandas:</p>
-<div><pre><code>import pandas as pd
+<div data-ext="text"><pre><code>import pandas as pd
 
 df = pd.read_csv("Data7602DescendingYearOrder.csv")
 res = df.groupby("year")["geo_count"].sum()
 print(res)
-</code></pre></div><div><pre><code>> benchmark {python .\load.py}
+</code></pre></div><div data-ext="text"><pre><code>> benchmark {python .\load.py}
 
 ───┬────────────────────────
  # │       real time
@@ -3470,20 +3470,20 @@ print(res)
 <p>Note: while all the dataframe functionality is currently grouped behind the <code>dataframe</code> top-level command, we hope to extend support for dataframes to other common Nushell commands.</p>
 <h2 id="improved-multiline-support-jt" tabindex="-1"> Improved multiline support (jt)</h2>
 <p>We've extended multiline expression support to more areas. Now, you can span tables over multiple lines more naturally:</p>
-<div><pre><code>[
+<div data-ext="text"><pre><code>[
   [name, value];
   [foo, 2]
   [bar, 7]
 ]
 </code></pre></div><p>Subexpression now also span multiple lines. Everything inside of the parentheses are treated as if they were written together:</p>
-<div><pre><code>(echo foo
+<div data-ext="text"><pre><code>(echo foo
 | str length)
 </code></pre></div><p>This also gives you a way to split up commands that have many arguments over multiple lines:</p>
-<div><pre><code>(echo foo
+<div data-ext="text"><pre><code>(echo foo
 bar)
 </code></pre></div><h2 id="multiple-shorthand-environment-vars-jt" tabindex="-1"> Multiple shorthand environment vars (jt)</h2>
 <p>A long-time shortcoming is now fixed in 0.34. You can now pass multiple environment shorthands to the same command:</p>
-<div><pre><code>> FOO=bar BAR=baz $nu.env.FOO + $nu.env.BAR
+<div data-ext="text"><pre><code>> FOO=bar BAR=baz $nu.env.FOO + $nu.env.BAR
 barbaz
 </code></pre></div><h2 id="variable-completions-andrasio" tabindex="-1"> Variable completions (andrasio)</h2>
 <p>In addition to steadily improving the completion engine, we've started adding support for completions for built-in variables.</p>
@@ -3558,7 +3558,7 @@ Today, we're releasing 0.33 of Nu. This release includes improved completions, s
 <p>Behind the scenes, we've also refactored completions into their own crate, so that we can more easily grow the areas where completions are supported.</p>
 <h2 id="pipeline-vars-jt" tabindex="-1"> Pipeline vars (jt)</h2>
 <p>Sometimes, when you're working on a pipeline, you want to refer to values coming in using an xargs style. With 0.33, we've introduced a new built-in variable called <code>$in</code>. The <code>$in</code> variable will collect the pipeline into a value for you, allowing you to access the whole stream as a parameter.</p>
-<div><pre><code><span>></span> <span>echo</span> <span>1</span> <span>2</span> <span>3</span> <span>|</span> <span>$in</span>.1 * <span>$in</span>.2
+<div data-ext="sh"><pre><code><span>></span> <span>echo</span> <span>1</span> <span>2</span> <span>3</span> <span>|</span> <span>$in</span>.1 * <span>$in</span>.2
 <span>6</span>
 </code></pre></div><h2 id="new-distributions-itsme-alan-zmedico" tabindex="-1"> New distributions (itsme-alan, zmedico)</h2>
 <p>You can now install Nushell from the <a href="https://github.com/microsoft/winget-pkgs/pull/17428" target="_blank" rel="noopener noreferrer">winget repo</a> and from <a href="https://packages.gentoo.org/packages/app-shells/nushell" target="_blank" rel="noopener noreferrer">gentoo</a>.</p>
@@ -3622,31 +3622,31 @@ Today, we're releasing 0.32 of Nu. This release contains a large amount of usabi
 <h2 id="new-expression-syntax-jt" tabindex="-1"> New expression syntax (jt)</h2>
 <p>We've simplified our expression/subexpression logic to make it much more predictable and universal. The parser will now automatically handle by command calls and expressions in the same way, so that you don't have to remember to use <code>=</code> to switch from one mode to the next.</p>
 <p>Before 0.32:</p>
-<div><pre><code><span>></span> <span>=</span> <span>10</span> + <span>3</span>
+<div data-ext="sh"><pre><code><span>></span> <span>=</span> <span>10</span> + <span>3</span>
 <span>13</span>
 </code></pre></div><p>With 0.32:</p>
-<div><pre><code><span>></span> <span>10</span> + <span>3</span>
+<div data-ext="sh"><pre><code><span>></span> <span>10</span> + <span>3</span>
 <span>13</span>
 </code></pre></div><p>You can also use any value as an expression, including variables or strings:</p>
-<div><pre><code><span>></span> <span>"hello world"</span>
+<div data-ext="sh"><pre><code><span>></span> <span>"hello world"</span>
 hello world
 </code></pre></div><p>Subexpressions also follow a similar simplification. We've removed the previous <code>$()</code> style, replacing it with <code>()</code>. This allows you to put subexpressions anywhere that you want.</p>
-<div><pre><code><span>></span> <span>10</span> * <span>(</span><span>3</span> + <span>2</span><span>)</span>
+<div data-ext="sh"><pre><code><span>></span> <span>10</span> * <span>(</span><span>3</span> + <span>2</span><span>)</span>
 <span>50</span>
-</code></pre></div><div><pre><code><span>></span> <span>echo</span> <span>((</span>ls <span>|</span> length<span>)</span> / <span>2</span><span>)</span>
+</code></pre></div><div data-ext="sh"><pre><code><span>></span> <span>echo</span> <span>((</span>ls <span>|</span> length<span>)</span> / <span>2</span><span>)</span>
 <span>7</span>
 </code></pre></div><p>This allows parens to mean &quot;do this first&quot; in both math expression and command calls.</p>
 <h2 id="subexpressions-and-column-paths-jt" tabindex="-1"> Subexpressions and column paths (jt)</h2>
 <p>The new subexpressions can also use &quot;column paths&quot;, or paths that start from the current value and travel to a subset of the structured data inside.</p>
 <p>For example, you could combine column paths with some subtraction to find when you last booted your system:</p>
-<div><pre><code><span>></span> <span>(</span>date now<span>)</span> - <span>(</span>sys<span>)</span>.host.uptime
+<div data-ext="sh"><pre><code><span>></span> <span>(</span>date now<span>)</span> - <span>(</span>sys<span>)</span>.host.uptime
 <span>2021</span>-05-31 09:00:24.124736365 +12:00
 </code></pre></div><h2 id="new-string-interpolation-jt" tabindex="-1"> New string interpolation (jt)</h2>
 <p>We've also updated string interpolation to match the expression/subexpression simplification mentioned above. The same &quot;parens mean do this first&quot; pattern applies:</p>
-<div><pre><code><span>></span> $<span>"the result is (3 + 2)"</span>
+<div data-ext="sh"><pre><code><span>></span> $<span>"the result is (3 + 2)"</span>
 the result is <span>5</span>
 </code></pre></div><p>For interpolation that uses column paths, wrap the entire column path in a pair of parens:</p>
-<div><pre><code><span>></span> $<span>"uptime is (sys).host.uptime"</span>
+<div data-ext="sh"><pre><code><span>></span> $<span>"uptime is (sys).host.uptime"</span>
 <span>uptime</span> is <span>[</span>row <span>host</span> cpu mem temp<span>]</span>.host.uptime
 
 <span>></span> $<span>"uptime is ((sys).host.uptime)"</span>
@@ -3658,7 +3658,7 @@ the result is <span>5</span>
 <p>With 0.32, we feel like we've managed to come up with a solution that meets both the Nushell philosophy of limiting mutation while also giving the freedom to port virtual environment scripts to Nushell.</p>
 <p>We call it &quot;environment loading&quot;. Here, rather than having commands mutate the global environment, they instead return a table of changes they'd like to apply to the environment. This table can be then loaded into the current scope, effectively separating the &quot;what&quot; of the update from the &quot;when&quot;.</p>
 <p>Let's try this by creating a table of three new environment variables we'll load:</p>
-<div><pre><code>def activate <span>[</span><span>]</span> <span>{</span>
+<div data-ext="sh"><pre><code>def activate <span>[</span><span>]</span> <span>{</span>
   <span>[</span><span>[</span>name, value<span>]</span><span>;</span> <span>[</span>FOO, BAR<span>]</span> <span>[</span>DEBUG, TRUE<span>]</span> <span>[</span>CURRENTENV, NUSHELL<span>]</span><span>]</span>
 <span>}</span>
 
@@ -3680,14 +3680,14 @@ load-env <span>(</span>activate<span>)</span>
 <p>For a full list of updated line editing capabilities, check out the update <a href="https://github.com/nushell/nushell/blob/main/docs/sample_config/keybindings.yml" target="_blank" rel="noopener noreferrer">sample keybinding file</a>.</p>
 <h2 id="explicit-block-parameters-jt" tabindex="-1"> Explicit block parameters (jt)</h2>
 <p>You can now name block parameters. You can use this to help make working with blocks easier to read.</p>
-<div><pre><code><span>></span> <span>ls</span> <span>|</span> each <span>{</span> <span>|</span>row<span>|</span> <span>echo</span> <span>$row</span>.name <span>}</span>
+<div data-ext="sh"><pre><code><span>></span> <span>ls</span> <span>|</span> each <span>{</span> <span>|</span>row<span>|</span> <span>echo</span> <span>$row</span>.name <span>}</span>
 </code></pre></div><h2 id="do-supports-passing-arguments-stepnivik" tabindex="-1"> <code>do</code> supports passing arguments (stepnivik)</h2>
 <p>You can now pass arguments to give the running block as part of a <code>do</code> call:</p>
-<div><pre><code><span>></span> <span>do</span> <span>{</span> <span>|</span>x<span>|</span> <span>$x</span> + <span>100</span><span>}</span> <span>55</span>
+<div data-ext="sh"><pre><code><span>></span> <span>do</span> <span>{</span> <span>|</span>x<span>|</span> <span>$x</span> + <span>100</span><span>}</span> <span>55</span>
 <span>155</span>
 </code></pre></div><h2 id="new-for-in-command-jt" tabindex="-1"> New <code>for..in</code> command (jt)</h2>
 <p>With the new <code>for..in</code> command, you can write more natural iterating loops:</p>
-<div><pre><code><span>></span> <span>for</span> <span>$x</span> <span>in</span> <span>1</span><span>..</span><span>3</span> <span>{</span> <span>echo</span> <span>(</span><span>$x</span> + <span>10</span><span>)</span> <span>}</span>
+<div data-ext="sh"><pre><code><span>></span> <span>for</span> <span>$x</span> <span>in</span> <span>1</span><span>..</span><span>3</span> <span>{</span> <span>echo</span> <span>(</span><span>$x</span> + <span>10</span><span>)</span> <span>}</span>
 ───┬────
  <span>0</span> │ <span>11</span>
  <span>1</span> │ <span>12</span>
@@ -3696,22 +3696,22 @@ load-env <span>(</span>activate<span>)</span>
 </code></pre></div><h2 id="flags-can-now-use-equals-andrasio" tabindex="-1"> Flags can now use equals (andrasio)</h2>
 <p>You can now use <code>=</code> between a flag and its value.</p>
 <p>For example, in addition to:</p>
-<div><pre><code><span>></span> <span>seq</span> <span>--separator</span> <span>':'</span> <span>1</span> <span>10</span>
+<div data-ext="sh"><pre><code><span>></span> <span>seq</span> <span>--separator</span> <span>':'</span> <span>1</span> <span>10</span>
 <span>1</span>:2:3:4:5:6:7:8:9:10
 </code></pre></div><p>You can also write:</p>
-<div><pre><code><span>></span> <span>seq</span> <span>--separator</span><span>=</span><span>':'</span> <span>1</span> <span>10</span>
+<div data-ext="sh"><pre><code><span>></span> <span>seq</span> <span>--separator</span><span>=</span><span>':'</span> <span>1</span> <span>10</span>
 <span>1</span>:2:3:4:5:6:7:8:9:10
 </code></pre></div><h2 id="other-improvements" tabindex="-1"> Other improvements</h2>
 <h3 id="simple-string-concatenation-jt" tabindex="-1"> Simple string concatenation (jt)</h3>
 <p>You can now create a new string by concatenating two strings <code>&quot;hello &quot; + &quot;world&quot;</code>.</p>
 <h3 id="path-relative-to-kubouch" tabindex="-1"> Path relative-to (kubouch)</h3>
 <p>Implements path relative-to subcommand. It converts the input path as a relative to the argument path, like this:</p>
-<div><pre><code><span>></span> <span>'eggs/bacon/sausage/spam'</span> <span>|</span> path relative-to <span>'eggs/bacon/sausage'</span>
+<div data-ext="sh"><pre><code><span>></span> <span>'eggs/bacon/sausage/spam'</span> <span>|</span> path relative-to <span>'eggs/bacon/sausage'</span>
 spam
 </code></pre></div><p>There are also additional <a href="https://github.com/nushell/nushell/pull/3441" target="_blank" rel="noopener noreferrer"><code>path</code>-related fixes</a>.</p>
 <h3 id="negative-indexing-for-range-alexshadley" tabindex="-1"> Negative indexing for range (alexshadley)</h3>
 <p>You can now pass negative ranges to the <code>range</code> command, and it will work from the back of the input.</p>
-<div><pre><code>> echo [1 2 3 4 5] | range (-3..)
+<div data-ext="text"><pre><code>> echo [1 2 3 4 5] | range (-3..)
 </code></pre></div><p>Will return <code>[3, 4, 5]</code>.</p>
 <h3 id="default-integer-is-now-signed-64-bit-jt" tabindex="-1"> Default integer is now signed 64-bit (jt)</h3>
 <p>In 0.32, adds a new primitive data type for i64 and makes it the default integer type.</p>
@@ -3739,9 +3739,9 @@ spam
 <li>Invocations of the style <code>$()</code> have now been replaced by <code>()</code> subexpressions. <code>$(= 2 + 3)</code> is now <code>(2 + 3)</code></li>
 <li>String interpolation of the style:</li>
 </ul>
-<div><pre><code><span><span>`</span>the result is <span>{</span><span>{</span><span>=</span> <span>1</span> + <span>2</span><span>}</span><span>}</span><span>`</span></span>
+<div data-ext="sh"><pre><code><span><span>`</span>the result is <span>{</span><span>{</span><span>=</span> <span>1</span> + <span>2</span><span>}</span><span>}</span><span>`</span></span>
 </code></pre></div><p>Are now replaced with:</p>
-<div><pre><code>$<span>"the result is (1 + 2)"</span>
+<div data-ext="sh"><pre><code>$<span>"the result is (1 + 2)"</span>
 </code></pre></div><ul>
 <li><code>seq</code> will now return numbers when possible</li>
 <li>The default integer is now signed 64-bit integer and not big integers.</li>
