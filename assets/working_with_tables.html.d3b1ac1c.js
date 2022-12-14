@@ -104,20 +104,20 @@ import{_ as l,z as i,A as d,X as e,C as t,T as n,$ as s,a6 as o,Q as r}from"./fr
 ───┴───┴───
 `)])],-1),D=e("h3",{id:"merging-tables",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#merging-tables","aria-hidden":"true"},"#"),t(" Merging Tables")],-1),q=e("code",null,"merge",-1),C=o(`<div class="language-text" data-ext="text"><pre class="language-text"><code>&gt; let $first = [[a b]; [1 2]]
 &gt; let $second = [[c d]; [3 4]]
-&gt; $first | merge { $second }
+&gt; $first | merge $second 
 ───┬───┬───┬───┬───
  # │ a │ b │ c │ d
 ───┼───┼───┼───┼───
  0 │ 1 │ 2 │ 3 │ 4
 ───┴───┴───┴───┴───
 </code></pre></div><p>Let&#39;s add a third table:</p><div class="language-text" data-ext="text"><pre class="language-text"><code>&gt; let $third = [[e f]; [5 6]]
-</code></pre></div><p>We could join all three tables together like this:</p><div class="language-text" data-ext="text"><pre class="language-text"><code>&gt; $first | merge { $second } | merge { $third }
+</code></pre></div><p>We could join all three tables together like this:</p><div class="language-text" data-ext="text"><pre class="language-text"><code>&gt; $first | merge $second  | merge $third 
 ───┬───┬───┬───┬───┬───┬───
  # │ a │ b │ c │ d │ e │ f
 ───┼───┼───┼───┼───┼───┼───
  0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6
 ───┴───┴───┴───┴───┴───┴───
-</code></pre></div>`,5),Y=e("code",null,"reduce",-1),A=e("div",{class:"language-text","data-ext":"text"},[e("pre",{class:"language-text"},[e("code",null,`> [$first $second $third] | reduce {|it, acc| $acc | merge { $it }}
+</code></pre></div>`,5),Y=e("code",null,"reduce",-1),A=e("div",{class:"language-text","data-ext":"text"},[e("pre",{class:"language-text"},[e("code",null,`> [$first $second $third] | reduce {|it, acc| $acc | merge $it }
 ───┬───┬───┬───┬───┬───┬───
  # │ a │ b │ c │ d │ e │ f
 ───┼───┼───┼───┼───┼───┼───
