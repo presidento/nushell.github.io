@@ -12,7 +12,7 @@ import{_ as s,z as d,A as i,X as e,C as a,T as n,$ as o,a6 as l,Q as c}from"./fr
 
 greet nushell
 </code></pre></div><p>returns <code>hello nushell</code></p></div><h2 id="command-names" tabindex="-1"><a class="header-anchor" href="#command-names" aria-hidden="true">#</a> Command names</h2><p>In Nushell, a command name is a string of characters. Here are some examples of valid command names: <code>greet</code>, <code>get-size</code>, <code>mycommand123</code>, <code>my command</code>, and <code>😊</code>.</p><p><em>Note: It&#39;s common practice in Nushell to separate the words of the command with <code>-</code> for better readability.</em> For example <code>get-size</code> instead of <code>getsize</code> or <code>get_size</code>.</p><h2 id="sub-commands" tabindex="-1"><a class="header-anchor" href="#sub-commands" aria-hidden="true">#</a> Sub-commands</h2><p>You can also define subcommands to commands using a space. For example, if we wanted to add a new subcommand to <code>str</code>, we can create it by naming our subcommand to start with &quot;str &quot;. For example:</p><div class="language-nushell" data-ext="nushell"><pre class="language-nushell"><code>def &quot;str mycommand&quot; [] {
-  hello
+  &quot;hello&quot;
 }
 </code></pre></div><p>Now we can call our custom command as if it were a built-in subcommand of <code>str</code>:</p><div class="language-text" data-ext="text"><pre class="language-text"><code>&gt; str mycommand
 </code></pre></div><p>Of course, commands with spaces in their names are defined in the same way:</p><div class="language-nushell" data-ext="nushell"><pre class="language-nushell"><code>def &quot;custom command&quot; [] {
