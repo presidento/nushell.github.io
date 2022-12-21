@@ -3,7 +3,7 @@
   <id>https://www.nushell.sh/</id>
   <title>Nushell</title>
   <subtitle>A new type of shell.</subtitle>
-  <updated>2022-12-20T20:13:57.727Z</updated>
+  <updated>2022-12-21T00:55:48.984Z</updated>
   <generator>vuepress-plugin-feed2</generator>
   <link rel="self" href="https://www.nushell.sh/feed.atom"/>
   <link rel="alternate" href="https://www.nushell.sh/"/>
@@ -14,7 +14,7 @@
     <title type="html">Nushell 0.73</title>
     <id>https://www.nushell.sh/blog/2022-12-20-nushell-0.73.html</id>
     <link href="https://www.nushell.sh/blog/2022-12-20-nushell-0.73.html"/>
-    <updated>2022-12-20T20:09:56.000Z</updated>
+    <updated>2022-12-21T00:51:47.000Z</updated>
     <summary type="html"><![CDATA[<h1 id="nushell-0-73" tabindex="-1"> Nushell 0.73</h1>
 <p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
 <p>Today, we're releasing version 0.73 of Nu. This release includes new math commands, an interactive data viewer, and many command refinements.</p>
@@ -130,6 +130,7 @@ It supports filtering a table by entries appearing in a particular column.</p>
 <p>Starting with 0.73, Nushell now provides a RISC V for Linux as part of the set of release binaries.</p>
 <h1 id="breaking-changes" tabindex="-1"> Breaking changes</h1>
 <ul>
+<li><code>save</code> no longer overwrites files by default, you must use the new <code>-f</code>/<code>--force</code> flag to overwrite an existing file (<a href="https://github.com/nushell/nushell/pull/7262" target="_blank" rel="noopener noreferrer">#7262</a>)</li>
 <li><code>split row</code> command will retain an empty string if splitted string is empty. (<a href="https://github.com/nushell/nushell/pull/7413" target="_blank" rel="noopener noreferrer">#7413</a>)</li>
 <li><code>split list</code> now properly removes the separator in all positions (<a href="https://github.com/nushell/nushell/pull/7355" target="_blank" rel="noopener noreferrer">#7355</a>)</li>
 <li><a href="https://github.com/nushell/nushell/pull/7462" target="_blank" rel="noopener noreferrer">The <code>--show-created-paths</code> flag has been replaced by <code>--verbose</code> from <code>mkdir</code></a>.</li>

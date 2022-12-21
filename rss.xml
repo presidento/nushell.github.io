@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Tue, 20 Dec 2022 20:13:57 GMT</pubDate>
-    <lastBuildDate>Tue, 20 Dec 2022 20:13:57 GMT</lastBuildDate>
+    <pubDate>Wed, 21 Dec 2022 00:55:48 GMT</pubDate>
+    <lastBuildDate>Wed, 21 Dec 2022 00:55:48 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -131,6 +131,7 @@ It supports filtering a table by entries appearing in a particular column.</p>
 <p>Starting with 0.73, Nushell now provides a RISC V for Linux as part of the set of release binaries.</p>
 <h1 id="breaking-changes" tabindex="-1"> Breaking changes</h1>
 <ul>
+<li><code>save</code> no longer overwrites files by default, you must use the new <code>-f</code>/<code>--force</code> flag to overwrite an existing file (<a href="https://github.com/nushell/nushell/pull/7262" target="_blank" rel="noopener noreferrer">#7262</a>)</li>
 <li><code>split row</code> command will retain an empty string if splitted string is empty. (<a href="https://github.com/nushell/nushell/pull/7413" target="_blank" rel="noopener noreferrer">#7413</a>)</li>
 <li><code>split list</code> now properly removes the separator in all positions (<a href="https://github.com/nushell/nushell/pull/7355" target="_blank" rel="noopener noreferrer">#7355</a>)</li>
 <li><a href="https://github.com/nushell/nushell/pull/7462" target="_blank" rel="noopener noreferrer">The <code>--show-created-paths</code> flag has been replaced by <code>--verbose</code> from <code>mkdir</code></a>.</li>
