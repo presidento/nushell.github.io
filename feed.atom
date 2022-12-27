@@ -3,7 +3,7 @@
   <id>https://www.nushell.sh/</id>
   <title>Nushell</title>
   <subtitle>A new type of shell.</subtitle>
-  <updated>2022-12-27T07:28:33.656Z</updated>
+  <updated>2022-12-27T21:03:28.562Z</updated>
   <generator>vuepress-plugin-feed2</generator>
   <link rel="self" href="https://www.nushell.sh/feed.atom"/>
   <link rel="alternate" href="https://www.nushell.sh/"/>
@@ -14,7 +14,7 @@
     <title type="html">Nushell 0.73</title>
     <id>https://www.nushell.sh/blog/2022-12-20-nushell-0.73.html</id>
     <link href="https://www.nushell.sh/blog/2022-12-20-nushell-0.73.html"/>
-    <updated>2022-12-21T00:51:47.000Z</updated>
+    <updated>2022-12-27T20:59:34.000Z</updated>
     <summary type="html"><![CDATA[<h1 id="nushell-0-73" tabindex="-1"> Nushell 0.73</h1>
 <p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
 <p>Today, we're releasing version 0.73 of Nu. This release includes new math commands, an interactive data viewer, and many command refinements.</p>
@@ -38,16 +38,16 @@
 <li>run <code>explore</code>, then type <code>:try</code> and press the Enter key to enter a mode where you can run commands inside <code>explore</code></li>
 </ul>
 <p><code>explore</code> is highly experimental and we expect it to change in the future. <a href="https://github.com/nushell/nushell/issues/new/choose" target="_blank" rel="noopener noreferrer">Please report any issues you discover</a>.</p>
-<h3 id="new-math-commands-sholderbach" tabindex="-1"> New <code>math</code> commands (<a href="https://github.com/nushell/nushell/pull/7258" target="_blank" rel="noopener noreferrer">sholderbach</a>)</h3>
+<h2 id="new-math-commands-sholderbach" tabindex="-1"> New <code>math</code> commands (<a href="https://github.com/nushell/nushell/pull/7258" target="_blank" rel="noopener noreferrer">sholderbach</a>)</h2>
 <p>With this release we include a larger number of <code>math</code> commands for real valued math such as trigonometric functions and logarithms.
 The goal is to remove the <code>math eval</code> command that operates on strings instead of proper nushell expressions.</p>
-<h4 id="constants" tabindex="-1"> Constants</h4>
+<h3 id="constants" tabindex="-1"> Constants</h3>
 <ul>
 <li><code>math pi</code></li>
 <li><code>math tau</code></li>
 <li><code>math e</code></li>
 </ul>
-<h4 id="trigonometry-and-hyperbolic-functions" tabindex="-1"> Trigonometry and hyperbolic functions</h4>
+<h3 id="trigonometry-and-hyperbolic-functions" tabindex="-1"> Trigonometry and hyperbolic functions</h3>
 <ul>
 <li><code>math sin</code></li>
 <li><code>math cos</code></li>
@@ -62,64 +62,64 @@ The goal is to remove the <code>math eval</code> command that operates on string
 <li><code>math arccosh</code></li>
 <li><code>math arctanh</code></li>
 </ul>
-<h4 id="logarithms" tabindex="-1"> Logarithms</h4>
+<h3 id="logarithms" tabindex="-1"> Logarithms</h3>
 <ul>
 <li><code>math log</code></li>
 <li><code>math ln</code></li>
 </ul>
-<div data-ext="sh"><pre><code><span>></span> math pi <span>|</span> math cos
+<div data-ext="sh"><pre><code>〉math pi <span>|</span> math cos
 <span>-1</span>
-<span>></span> math e <span>|</span> math <span>ln</span>
+〉math e <span>|</span> math <span>ln</span>
 <span>1</span>
-<span>></span> <span>[</span><span>16</span> <span>8</span> <span>4</span> <span>2</span><span>]</span> <span>|</span> math log <span>2</span>
+〉<span>[</span><span>16</span> <span>8</span> <span>4</span> <span>2</span><span>]</span> <span>|</span> math log <span>2</span>
 <span>[</span><span>4</span> <span>3</span> <span>2</span> <span>1</span><span>]</span>
 </code></pre></div><h2 id="changes-to-commands-with-predicates-kubouch" tabindex="-1"> Changes to commands with predicates (<a href="https://github.com/nushell/nushell/pull/7428" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p><code>any</code>, <code>all</code>, <code>skip until</code>, <code>skip while</code>, <code>take until</code>, and <code>take while</code> now accept a closure instead of a row condition. For example</p>
-<div data-ext="text"><pre><code>[[status]; [UP] [UP]] | all status == UP
+<div data-ext="sh"><pre><code><span>[</span><span>[</span>status<span>]</span><span>;</span> <span>[</span>UP<span>]</span> <span>[</span>UP<span>]</span><span>]</span> <span>|</span> all status <span>==</span> UP
 </code></pre></div><p>becomes</p>
-<div data-ext="text"><pre><code>[[status]; [UP] [UP]] | all {|el| $el.status == UP }
+<div data-ext="sh"><pre><code><span>[</span><span>[</span>status<span>]</span><span>;</span> <span>[</span>UP<span>]</span> <span>[</span>UP<span>]</span><span>]</span> <span>|</span> all <span>{</span><span>|</span>el<span>|</span> <span>$el</span>.status <span>==</span> UP <span>}</span>
 </code></pre></div><p>This makes them slightly more verbose but it is a part of an effort to refactor our parser to allow defining concrete grammar rules for the Nu language. Row condition is currently accepted only in the <code>where</code> command which becomes a parser built-in command (like <code>use</code> or <code>let</code>).</p>
 <h2 id="new-filter-command-and-simpler-where-kubouch" tabindex="-1"> New <code>filter</code> command and simpler <code>where</code> (<a href="https://github.com/nushell/nushell/pull/7365" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p>We found the <code>-b</code> flag of <code>where</code> quite confusing and decided to remove it in favor of a new <code>filter</code> command. Both <code>filter</code> and <code>where</code> have similar functionality but <code>where</code> now only accepts a row condition and <code>filter</code> accepts a closure. Before:</p>
-<div data-ext="text"><pre><code>[{a: 1} {a: 2}] | where -b {|x| $x.a > 1}
+<div data-ext="sh"><pre><code><span>[</span><span>{</span>a: <span>1</span><span>}</span> <span>{</span>a: <span>2</span><span>}</span><span>]</span> <span>|</span> where <span>-b</span> <span>{</span><span>|</span>x<span>|</span> <span>$x</span>.a <span>></span> <span>1</span><span>}</span>
 </code></pre></div><p>After:</p>
-<div data-ext="text"><pre><code>[{a: 1} {a: 2}] | filter {|x| $x.a > 1}
+<div data-ext="sh"><pre><code><span>[</span><span>{</span>a: <span>1</span><span>}</span> <span>{</span>a: <span>2</span><span>}</span><span>]</span> <span>|</span> filter <span>{</span><span>|</span>x<span>|</span> <span>$x</span>.a <span>></span> <span>1</span><span>}</span>
 </code></pre></div><p>Why is it useful to have two commands doing the same thing? Because with the <code>filter</code> command, you can store the closure in a variable:</p>
-<div data-ext="text"><pre><code>let cond = {|x| $x.a > 1}
-[{a: 1} {a: 2}] | filter $cond
+<div data-ext="sh"><pre><code><span>let</span> cond <span>=</span> <span>{</span><span>|</span>x<span>|</span> <span>$x</span>.a <span>></span> <span>1</span><span>}</span>
+<span>[</span><span>{</span>a: <span>1</span><span>}</span> <span>{</span>a: <span>2</span><span>}</span><span>]</span> <span>|</span> filter <span>$cond</span>
 </code></pre></div><p>On the other hand, <code>where</code> is more concise (<code>[{a: 1} {a: 2}] | where a &gt; 1</code>) but you can't store its condition in a variable. The choice is yours!</p>
 <h2 id="new-command-uniq-by-raccmonteiro" tabindex="-1"> New command <code>uniq-by</code> (<a href="https://github.com/nushell/nushell/pull/7295" target="_blank" rel="noopener noreferrer">raccmonteiro</a>)</h2>
 <p>To complement <code>uniq</code> which can identify unique or duplicated values in a collection or report the number of occurrences for a particular entry, we now have <code>uniq-by</code>.
 It supports filtering a table by entries appearing in a particular column.</p>
-<div data-ext="text"><pre><code>〉 [[fruit day]; [apple monday] [apple friday] [Apple friday] [apple monday] [pear monday] [orange tuesday]] | uniq-by fruit
+<div data-ext="sh"><pre><code>〉 <span>[</span><span>[</span>fruit day<span>]</span><span>;</span> <span>[</span>apple monday<span>]</span> <span>[</span>apple friday<span>]</span> <span>[</span>Apple friday<span>]</span> <span>[</span>apple monday<span>]</span> <span>[</span>pear monday<span>]</span> <span>[</span>orange tuesday<span>]</span><span>]</span> <span>|</span> uniq-by fruit
 ╭───┬────────┬─────────╮
-│ # │ fruit  │   day   │
+│ <span># │ fruit  │   day   │</span>
 ├───┼────────┼─────────┤
-│ 0 │ apple  │ monday  │
-│ 1 │ Apple  │ friday  │
-│ 2 │ pear   │ monday  │
-│ 3 │ orange │ tuesday │
+│ <span>0</span> │ apple  │ monday  │
+│ <span>1</span> │ Apple  │ friday  │
+│ <span>2</span> │ pear   │ monday  │
+│ <span>3</span> │ orange │ tuesday │
 ╰───┴────────┴─────────╯
 </code></pre></div><h2 id="mutable-data-structures-can-now-have-their-inner-values-mutated-using-webbedspace" tabindex="-1"> Mutable data structures can now have their inner values mutated using <code>=</code> (<a href="https://github.com/nushell/nushell/pull/7318" target="_blank" rel="noopener noreferrer">webbedspace</a>)</h2>
 <p>If a variable has been defined as mutable using the recently-added <code>mut</code> keyword, you can now deeply mutate its inner values using <code>=</code>.</p>
-<div data-ext="text"><pre><code>〉 mut a = { b: 1 }
-〉 $a.b = 2
-〉 $a.c = 3
-〉 $a | to nuon
-{b: 2, c: 3}
+<div data-ext="sh"><pre><code>〉 mut a <span>=</span> <span>{</span> b: <span>1</span> <span>}</span>
+〉 <span>$a</span>.b <span>=</span> <span>2</span>
+〉 <span>$a</span>.c <span>=</span> <span>3</span>
+〉 <span>$a</span> <span>|</span> to nuon
+<span>{</span>b: <span>2</span>, c: <span>3</span><span>}</span>
 </code></pre></div><p>This syntax enhancement was added primarily to make modifying <code>$env.config</code> during a normal session much easier. Now, <code>$env.config</code> is considered inherently mutable. You can change a single config value like so:</p>
-<div data-ext="text"><pre><code>$env.config.table.mode = compact_double
+<div data-ext="sh"><pre><code><span>$env</span>.config.table.mode <span>=</span> compact_double
 </code></pre></div><p>...and it will remain in effect for the rest of the session.</p>
 <h2 id="more-sophisticated-coloring-of-data-values-using-closures-webbedspace" tabindex="-1"> More sophisticated coloring of data values using closures (<a href="https://github.com/nushell/nushell/pull/7141" target="_blank" rel="noopener noreferrer">webbedspace</a>)</h2>
 <p>The <code>color_config</code> config record has new functionality: instead of specifying a single color name for all values of a given type, you may now alternatively provide a closure that dynamically computes a color for each individual value. The closure takes, as input, a single value of the given type, and must produce either a string value representing a color, or a <code>{ fg, bg, attr }</code> record (the same as what <code>color_config</code> already accepts as a color value). This feature can be used to provide important visual distinctions between ranges of values in data.</p>
 <p>Here are some examples.</p>
-<div data-ext="text"><pre><code>filesize: {|e|
-	if $e == 0b { 'dark_gray'
-	} else if $e &lt; 1mb { 'cyan_bold'
-	} else { 'blue_bold' }
-}
+<div data-ext="sh"><pre><code>filesize: <span>{</span><span>|</span>e<span>|</span>
+	<span>if</span> <span>$e</span> <span>==</span> 0b <span>{</span> <span>'dark_gray'</span>
+	<span>}</span> <span>else</span> <span>if</span> <span>$e</span> <span>&lt;</span> 1mb <span>{</span> <span>'cyan_bold'</span>
+	<span>}</span> <span>else</span> <span>{</span> <span>'blue_bold'</span> <span>}</span>
+<span>}</span>
 </code></pre></div><p>This causes all filesize values to be colored using <code>dark_gray</code> if they equal <code>0b</code>, <code>cyan_bold</code> if they are less than <code>1mb</code>, and <code>blue_bold</code> otherwise. This means that, in <code>ls</code> output, empty files can be more easily distinguished from non-empty ones.</p>
-<div data-ext="text"><pre><code>bool: { if $in { 'light_cyan' } else { 'light_gray' } }
+<div data-ext="sh"><pre><code>bool: <span>{</span> <span>if</span> <span>$in</span> <span>{</span> <span>'light_cyan'</span> <span>}</span> <span>else</span> <span>{</span> <span>'light_gray'</span> <span>}</span> <span>}</span>
 </code></pre></div><p>This colors <code>true</code> in <code>light_cyan</code>, and <code>false</code> in <code>light_gray</code>. This can be useful when browsing a large table of booleans.</p>
 <p>The themes in the default <code>config.nu</code> file have been updated with further examples of these closures.</p>
 <p>In certain situations (most notably, during a single <code>ls</code> call that isn't piped to anything else) Nushell will parallelize the execution of these closures. As such, you cannot expect that they will run in the same order as each value appears in the output data.</p>
@@ -134,12 +134,12 @@ It supports filtering a table by entries appearing in a particular column.</p>
 <li><code>split row</code> command will retain an empty string if splitted string is empty. (<a href="https://github.com/nushell/nushell/pull/7413" target="_blank" rel="noopener noreferrer">#7413</a>)</li>
 <li><code>split list</code> now properly removes the separator in all positions (<a href="https://github.com/nushell/nushell/pull/7355" target="_blank" rel="noopener noreferrer">#7355</a>)</li>
 <li><a href="https://github.com/nushell/nushell/pull/7462" target="_blank" rel="noopener noreferrer">The <code>--show-created-paths</code> flag has been replaced by <code>--verbose</code> from <code>mkdir</code></a>.</li>
-<li><code>fetch</code> removes <code>--output</code>, <code>--bin</code>, <code>--append</code> flags, use <code>fetch</code> with <code>save</code> to save fetched page to a file. (<a href="https://github.com/nushell/nushell/pull/7468" target="_blank" rel="noopener noreferrer">#7468</a>)</li>
+<li><code>fetch</code>: the <code>--output</code>, <code>--bin</code>, <code>--append</code> flags have been removed, use <code>fetch</code> with <code>save</code> to save fetched page to a file. (<a href="https://github.com/nushell/nushell/pull/7468" target="_blank" rel="noopener noreferrer">#7468</a>)</li>
 <li>changes to how <code>get</code> works with deep cell paths (<a href="https://github.com/nushell/nushell/pull/7497" target="_blank" rel="noopener noreferrer">#7480</a>)</li>
 <li><code>mkdir</code>'s <code>-s</code>/<code>--show-created-paths</code> has been renamed to <code>-v</code>/<code>--verbose</code> for better consistency (<a href="https://github.com/nushell/nushell/pull/7462" target="_blank" rel="noopener noreferrer">#7462</a>)</li>
 <li><code>&amp;&amp;</code> is now <code>and</code> and <code>||</code> is now <code>or</code></li>
 <li><code>any</code>, <code>all</code>, <code>skip until</code>, <code>skip while</code>, <code>take until</code>, <code>take while</code> now take only a closure as an argument.</li>
-<li><code>where</code> now takes only row condition argument, <code>-b</code> flag removed.</li>
+<li><code>where</code> now takes only row condition argument, the <code>-b</code> flag has been removed (use <code>filter</code> instead of <code>where -b</code>).</li>
 </ul>
 <h1 id="full-changelog" tabindex="-1"> Full changelog</h1>
 <h2 id="nushell" tabindex="-1"> Nushell</h2>
