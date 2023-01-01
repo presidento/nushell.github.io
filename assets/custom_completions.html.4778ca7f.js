@@ -30,7 +30,13 @@ let carapace_completer = {|spans|
 # The default config record. This is where much of your global configuration is setup.
 let-env config = {
     # ... your config
-    external_completer: $carapace_completer
+    completions: {
+        external: {
+            enable: true
+            max_results: 100
+            completer: $carapace_completer
+        }
+    }
 }
 `)])],-1),k=e("p",null,"Multiple completers can be defined as such:",-1),T=e("div",{class:"language-nu","data-ext":"nu"},[e("pre",{class:"language-nu"},[e("code",null,`let external_completer = {|spans| 
   {
