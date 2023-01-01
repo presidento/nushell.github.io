@@ -209,7 +209,7 @@ let-env PROMPT_MULTILINE_INDICATOR <span class="token operator">=</span> <span c
 </code></pre></div><h3 id="completion-menu" tabindex="-1"><a class="header-anchor" href="#completion-menu" aria-hidden="true">#</a> Completion menu</h3><p>The completion menu is a context sensitive menu that will present suggestions based on the status of the prompt. These suggestions can range from path suggestions to command alternatives. While writing a command, you can activate the menu to see available flags for an internal command. Also, if you have defined your custom completions for external commands, these will appear in the menu as well.</p><p>The completion menu by default is accessed by pressing <code>tab</code> and it can be configured by modifying these values from the config object:</p><div class="language-bash" data-ext="sh"><pre class="language-bash"><code>  <span class="token builtin class-name">let</span> <span class="token variable">$config</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token punctuation">..</span>.
 
-    menus <span class="token operator">=</span> <span class="token punctuation">[</span>
+    menus: <span class="token punctuation">[</span>
       <span class="token punctuation">..</span>.
       <span class="token punctuation">{</span>
         name: completion_menu
