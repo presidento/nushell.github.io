@@ -6,8 +6,8 @@
     <link>https://www.nushell.sh/</link>
     <description>A new type of shell.</description>
     <language>English</language>
-    <pubDate>Tue, 10 Jan 2023 21:34:04 GMT</pubDate>
-    <lastBuildDate>Tue, 10 Jan 2023 21:34:04 GMT</lastBuildDate>
+    <pubDate>Tue, 10 Jan 2023 21:47:00 GMT</pubDate>
+    <lastBuildDate>Tue, 10 Jan 2023 21:47:00 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -50,7 +50,7 @@ help some-command  # displays the comments in the help message
 <p>The current batch of improvements can still be taken further. For example, custom help messages could possibly be defined also for variables and environment variables (via comments adjacent to <code>let</code> and <code>let-env</code>). We could also further improve the presentation of existing <code>help xxx</code> commands.</p>
 <h2 id="initial-support-for-parse-time-constants-kubouch" tabindex="-1"> Initial support for parse-time constants (<a href="https://github.com/nushell/nushell/pull/7436" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
 <p><em>This is a proof-of-concept that we plan to expand in the future.</em></p>
-<p><em>Tip: We also addedd a new <a href="/blog/book/how_nushell_code_gets_run.html">book section</a> with an in-depth explanation of Nushell's parsing and evaluation, hopefully clearing up some confusion about things like &quot;Why can't I source a dynamic path?&quot;. It also touches on the concept of parse-time constants.</em></p>
+<p><em>Tip: We also addedd a new <a href="https://www.nushell.sh/book/how_nushell_code_gets_run.html" target="_blank" rel="noopener noreferrer">book section</a> with an in-depth explanation of Nushell's parsing and evaluation, hopefully clearing up some confusion about things like &quot;Why can't I source a dynamic path?&quot;. It also touches on the concept of parse-time constants.</em></p>
 <p>A new <code>const</code> keyword is added to Nushell to define &quot;parse-time&quot; constants. Constants defined with <code>const</code> behave the same as variables defined with <code>let</code>, but in addition, they are usable in some contexts that require values known at parse-time. Currently, this applies to files or names passed to <code>use</code>, <code>overlay use</code>, <code>source</code>, and <code>source-env</code>. For example, the following now works:</p>
 <div data-ext="sh"><pre><code><span># Source a file from a constant</span>
 <span>></span> <span>'print hello!'</span> <span>|</span> save <span>--raw</span> say_hello.nu
