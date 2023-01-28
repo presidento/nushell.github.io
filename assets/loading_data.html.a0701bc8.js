@@ -22,7 +22,7 @@ import{_ as d,z as r,A as c,X as e,C as t,T as a,$ as n,a6 as s,Q as l}from"./fr
 </code></pre></div><p>We&#39;re shown the contents of the file.</p><p>Below the surface, what Nu sees in these text files is one large string. Next, we&#39;ll talk about how to work with these strings to get the data we need out of them.</p><h2 id="nuon" tabindex="-1"><a class="header-anchor" href="#nuon" aria-hidden="true">#</a> NUON</h2>`,8),y={href:"https://github.com/nushell/nushell/blob/main/crates/nu-utils/src/sample_config/default_config.nu",target:"_blank",rel:"noopener noreferrer"},N=e("div",{class:"language-text","data-ext":"text"},[e("pre",{class:"language-text"},[e("code",null,`{
   menus: [
     # Configuration for default nushell menus
-    # Note the lack of souce parameter
+    # Note the lack of source parameter
     {
       name: completion_menu
       only_buffer_difference: false
