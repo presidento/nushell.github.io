@@ -3,13 +3,244 @@
   <id>https://www.nushell.sh/</id>
   <title>Nushell</title>
   <subtitle>A new type of shell.</subtitle>
-  <updated>2023-01-31T21:01:56.125Z</updated>
+  <updated>2023-01-31T21:58:28.549Z</updated>
   <generator>vuepress-plugin-feed2</generator>
   <link rel="self" href="https://www.nushell.sh/feed.atom"/>
   <link rel="alternate" href="https://www.nushell.sh/"/>
   <contributor>
     <name>The Nu Authors</name>
   </contributor>
+  <entry>
+    <title type="html">Nushell 0.75</title>
+    <id>https://www.nushell.sh/blog/2023-01-31-nushell_0_75.html</id>
+    <link href="https://www.nushell.sh/blog/2023-01-31-nushell_0_75.html"/>
+    <updated>2023-01-31T21:53:23.000Z</updated>
+    <summary type="html"><![CDATA[<h1 id="nushell-0-75" tabindex="-1"> Nushell 0.75</h1>
+<p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
+<p>Today, we're releasing version 0.75 of Nu. This release extends our unicode support, renames some important HTTP-related commands, and improves our module system. It also contains a good amount of polish and refactoring behind the scenes.</p>
+]]></summary>
+    <content type="html"><![CDATA[<h1 id="nushell-0-75" tabindex="-1"> Nushell 0.75</h1>
+<p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your command line. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful command line pipelines.</p>
+<p>Today, we're releasing version 0.75 of Nu. This release extends our unicode support, renames some important HTTP-related commands, and improves our module system. It also contains a good amount of polish and refactoring behind the scenes.</p>
+
+<h1 id="where-to-get-it" tabindex="-1"> Where to get it</h1>
+<p>Nu 0.75 is available as <a href="https://github.com/nushell/nushell/releases/tag/0.75.0" target="_blank" rel="noopener noreferrer">pre-built binaries</a> or from <a href="https://crates.io/crates/nu" target="_blank" rel="noopener noreferrer">crates.io</a>. If you have Rust installed you can install it using <code>cargo install nu</code>.</p>
+<p>NOTE: The optional dataframe functionality is available by <code>cargo install nu --features=dataframe</code>.</p>
+<p>As part of this release, we also publish a set of optional plugins you can install and use with Nu. To install, use <code>cargo install nu_plugin_&lt;plugin name&gt;</code>.</p>
+<h1 id="themes-of-this-release-new-features" tabindex="-1"> Themes of this release / New features</h1>
+<h2 id="changed-unicode-escapes-in-strings-bobhy" tabindex="-1"> Changed Unicode escapes in strings (<a href="https://github.com/nushell/nushell/pull/7883" target="_blank" rel="noopener noreferrer">bobhy</a>)</h2>
+<div><p>WARNING</p>
+<p><strong>Breaking Change</strong>: You need to update escapes like <code>&quot;\u0043&quot;</code> to <code>&quot;\u{0043}&quot;</code></p>
+</div>
+<p>New format:</p>
+<div data-ext="sh"><pre><code>〉echo <span>"AB\u{43}\u{044}"</span>
+ABCD
+〉echo <span>"Gabriel, blow your \u{1f3BA}"</span>
+Gabriel, blow your 🎺
+</code></pre></div><p>Instead of:</p>
+<div data-ext="sh"><pre><code>〉echo <span>"AB<span title="\u0043">\u0043</span>"</span>
+ABC
+</code></pre></div><p>This format allows you to insert any Unicode code point into a string by specifying its value as 1 through 6 hex digits (with or without leading zeros, upper or lower case). The maximum value is <code>\u{10ffff}</code>, which is the largest Unicode code point defined.</p>
+<p>We've simply dropped support for the old format since we're pre-1.0 and didn't want to carry forward redundant syntax. You will have to change any unicode escapes in your scripts to the new format.</p>
+<p><em>Why change?</em> The old 4-digit syntax could not natively address recent extensions to Unicode standard, such as emoji, CJK extension and traditional scripts. There is a cumbersome workaround in the form of <a href="https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates" target="_blank" rel="noopener noreferrer">surrogate pairs</a>, but this is not intuitive.</p>
+<p>Why this change? The new format allows you to specify any Unicode code point with a single, predictable syntax.  Rust and ECMAScript 6 support the same syntax. (Full disclosure: C++, Python and Java don't.)</p>
+<h2 id="g-grapheme-cluster-flags-for-str-length-str-substring-str-index-of-split-words-and-split-chars-webbedspace" tabindex="-1"> <code>-g</code> grapheme cluster flags for <code>str length</code>, <code>str substring</code>, <code>str index-of</code>, <code>split words</code> and <code>split chars</code> (<a href="https://github.com/nushell/nushell/pull/7752" target="_blank" rel="noopener noreferrer">webbedspace</a>)</h2>
+<p>As you know, <code>str length</code>, <code>str substring</code>, <code>str index-of</code> and <code>split words</code> measure the length of strings and substrings in UTF-8 bytes, which is often very unintuitive - all non-ASCII characters are of length 2 or more, and splitting a non-ASCII character can create garbage characters as a result. A much better alternative is to measure the length in <em>extended grapheme clusters</em>. In Unicode, a &quot;grapheme cluster&quot; tries to map as closely as possible to a single visible character. This means, among many other things:</p>
+<ul>
+<li>Non-ASCII characters, such as <code>ん</code>, are considered single units of length 1, no matter how many UTF-8 bytes they use.</li>
+<li>Combined characters, such as <code>e</code> and <code>◌́ </code> being combined to produce <code>é</code>, are considered single units of length 1.</li>
+<li>Emojis, including combined emojis such as 🇯🇵, which is made of the 🇯 and 🇵 emojis plus a zero-width joiner, are considered single units of length 1. (This is a property of &quot;extended&quot; grapheme clusters.)</li>
+<li><code>&quot;\r\n&quot;</code> is considered a single unit of length 1.</li>
+</ul>
+<p>The new <code>--graphemes</code>/<code>-g</code> flag can be used with <code>str length</code>, <code>str substring</code>, <code>str index-of</code> and <code>split words</code> to enable these length/indexing measurements:</p>
+<div data-ext="text"><pre><code>〉'🇯🇵ほげ ふが ぴよ'   | str substring 4..6 -g
+ふが
+〉'🇯🇵ほげ ふが ぴよ'   | str length -g
+9
+〉'🇯🇵ほげ ふが ぴよ'   | str index-of 'ふが' -g
+4
+</code></pre></div><p>In addition, the flag has been added to <code>split chars</code>. Notably, this command splits on Unicode code points rather than UTF-8 bytes, so it doesn't have the issue of turning non-ASCII characters into garbage characters. However, combining emoji and combining characters do not correspond to single code points, and are split by <code>split chars</code>. The <code>-g</code> flag keeps those characters intact:</p>
+<div data-ext="text"><pre><code>〉'🇯🇵ほげ' | split chars -g | to nuon
+[🇯🇵, ほ, げ]
+</code></pre></div><p>These commands also have <code>--utf-8-bytes</code>/<code>-b</code> flags which enable the legacy behavior (and <code>split chars</code> has <code>--code-points</code>/<code>-c</code>). These currently <em>do not do anything</em> and need not strictly be used, since UTF-8 byte lengths are still the default behaviour. However, if this default someday changes, then these flags will guarantee that the legacy behaviour is used.</p>
+<div><p>TIP</p>
+<p>It is currently being debated whether or not grapheme clusters should be used as the default string length measurement in Nushell (making the <code>-g</code> flag the default behaviour for these commands), due to their intuitiveness, consistency across non-Latin scripts, and better correspondence to the length of strings displayed in the terminal (after stripping ANSI codes). Currently, the Nushell developers are uncertain what the long-term impact of such a change would be, whether existing scripts would be non-trivially harmed by it, or whether it would hinder interoperability with external programs. If you have any personal insight or opinion about this change, or about which behaviour you'd prefer not to require a flag, your input is desired!</p>
+</div>
+<h2 id="new-enumerate-command-jt" tabindex="-1"> New <code>enumerate</code> command (<a href="https://github.com/nushell/nushell/pull/7871" target="_blank" rel="noopener noreferrer">JT</a>)</h2>
+<p>A new <code>enumerate</code> command will enumerate the input, and add an index and item record for each item. The index is the number of the item in the input stream, and item is the original value of the item.</p>
+<div data-ext="text"><pre><code>> ls | enumerate | get 14
+╭───────┬────────────────────────────╮
+│ index │ 14                         │
+│       │ ╭──────────┬─────────────╮ │
+│ item  │ │ name     │ crates      │ │
+│       │ │ type     │ dir         │ │
+│       │ │ size     │ 832 B       │ │
+│       │ │ modified │ 2 weeks ago │ │
+│       │ ╰──────────┴─────────────╯ │
+╰───────┴────────────────────────────╯
+</code></pre></div><p>Rather than relying on the <code>--numbered</code> flags of commands like <code>each</code>, with the <code>enumerate</code> command we take more modular and composable approach than hard-coding flags to our commands. (Note: The <code>--numbered</code> flags have not been removed yet.)</p>
+<h2 id="breaking-changes-to-the-web-related-commands-kazuki-ya-vincenzocarlino" tabindex="-1"> Breaking changes to the web-related commands (<a href="https://github.com/nushell/nushell/pull/7796" target="_blank" rel="noopener noreferrer">Kazuki-Ya</a>, <a href="https://github.com/nushell/nushell/pull/7702" target="_blank" rel="noopener noreferrer">VincenzoCarlino</a>)</h2>
+<p>We decided to move some of the important commmand for interacting with HTTP under their own <code>http</code> subcommands for better discoverability.
+The common <code>fetch</code> command is now <code>http get</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Old name</th>
+<th>New name beginning with <code>0.75</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fetch</code></td>
+<td><code>http get</code></td>
+</tr>
+<tr>
+<td><code>post</code></td>
+<td><code>http post</code></td>
+</tr>
+<tr>
+<td><code>to url</code></td>
+<td><code>url build-query</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="main-command-exported-from-module-defines-top-level-module-command-kubouch" tabindex="-1"> <code>main</code> command exported from module defines top-level module command (<a href="https://github.com/nushell/nushell/pull/7764" target="_blank" rel="noopener noreferrer">kubouch</a>)</h2>
+<p>Defining and exporting a <code>main</code>command from a module allows creating a command with the same name as the module. Consider this example:</p>
+<div data-ext="text"><pre><code># command.nu
+export def main [] { 'This is a command' }
+
+export def subcommand [] { 'This is a subcommand' }
+</code></pre></div><p>Then:</p>
+<div data-ext="text"><pre><code>> use command.nu
+
+> command
+This is a command
+
+> command subcommand
+This is a subcommand
+</code></pre></div><p>The same thing works <code>overlay use</code> as well. Note that the <code>main</code> command continues to work the same way as before when running a script:</p>
+<div data-ext="text"><pre><code>> nu command.nu
+This is a command
+</code></pre></div><p>Combined with a <a href="https://github.com/nushell/nushell/pull/7830" target="_blank" rel="noopener noreferrer">recent bugfix</a>, this feature allows for nicer way of defining known externals and custom completions.</p>
+<p>Before:</p>
+<div data-ext="text"><pre><code># cargo.nu
+
+export extern cargo [--version, --color: string@cargo-color-complete]
+
+export extern `cargo check` [--quiet]
+
+def cargo-color-complete [] {
+    [ auto, always, never ]
+}
+</code></pre></div><p>After:</p>
+<div data-ext="text"><pre><code># cargo.nu
+
+export extern main [--version, --color: string@cargo-color-complete]
+
+export extern check [--quiet]
+
+def cargo-color-complete [] {
+    [ auto, always, never ]
+}
+</code></pre></div><p>It is also a stepping stone towards being able to handle directories which in turn is a stepping stone towards having proper Nushell packages.</p>
+<h2 id="progress-bar-for-save-command-xoffio" tabindex="-1"> Progress bar for <code>save</code> command (<a href="https://github.com/nushell/nushell/pull/7661" target="_blank" rel="noopener noreferrer">Xoffio</a>)</h2>
+<p>To watch the progress when saving large files you can now pass the <code>--progress</code> flag to <code>save</code>.
+It gives information about the throughput and an interactive progress bar if available.</p>
+<p><img src="@source/assets/images/0_75_save_progress.png" alt="Progress for saving a file"></p>
+<h1 id="breaking-changes" tabindex="-1"> Breaking changes</h1>
+<ul>
+<li>Unicode escapes in strings now use and extended format <code>\u{X...}</code>, any scripts using the old syntax <code>\uXXXX</code> will have to be updated.  See also <a href="https://github.com/nushell/nushell/pull/7883" target="_blank" rel="noopener noreferrer">#7883</a>.</li>
+<li>The <code>to url</code> command has been renamed and moved to <code>url build-query</code> as this better reflects is role as a nushell specific <code>url</code> command compared to a conversion. (<a href="https://github.com/nushell/nushell/pull/7702" target="_blank" rel="noopener noreferrer">#7702</a>)</li>
+<li><code>fetch</code> has been renamed to <code>http get</code> (<a href="https://github.com/nushell/nushell/pull/7796" target="_blank" rel="noopener noreferrer">#7796</a>)</li>
+<li><code>post</code> has been renamed to <code>http post</code> (<a href="https://github.com/nushell/nushell/pull/7796" target="_blank" rel="noopener noreferrer">#7796</a>)</li>
+<li>Quotes are trimmed when escaping to <code>cmd.exe</code> (<a href="https://github.com/nushell/nushell/pull/7740" target="_blank" rel="noopener noreferrer">#7740</a>)</li>
+<li><code>parse -r</code> now uses zero-indexed rows and uncapitalized columns (<a href="https://github.com/nushell/nushell/pull/7897" target="_blank" rel="noopener noreferrer">#7897</a>)</li>
+<li><code>last</code>, <code>skip</code>, <code>drop</code>, <code>take until</code>, <code>take while</code>, <code>skip until</code>, <code>skip while</code>, <code>where</code>, <code>reverse</code>, <code>shuffle</code>, <code>append</code>, <code>prepend</code> and <code>sort-by</code> raise error when given non-lists (<a href="https://github.com/nushell/nushell/pull/7623" target="_blank" rel="noopener noreferrer">#7623</a>)</li>
+<li><code>to csv</code> and <code>to tsv</code> now throw error on unsupported inputs (<a href="https://github.com/nushell/nushell/pull/7850" target="_blank" rel="noopener noreferrer">7850</a>)</li>
+</ul>
+<h1 id="full-changelog" tabindex="-1"> Full changelog</h1>
+<h2 id="nushell" tabindex="-1"> Nushell</h2>
+<ul>
+<li>kubouch created <a href="https://github.com/nushell/nushell/pull/7927" target="_blank" rel="noopener noreferrer">Remove deprecated <code>where -b</code> parameter</a>, and <a href="https://github.com/nushell/nushell/pull/7894" target="_blank" rel="noopener noreferrer">Fix panic when assigning value to $env</a>, and <a href="https://github.com/nushell/nushell/pull/7893" target="_blank" rel="noopener noreferrer">Fix wrong VarId of $in variable</a>, and <a href="https://github.com/nushell/nushell/pull/7830" target="_blank" rel="noopener noreferrer">Fix command name lookup for known externals</a>, and <a href="https://github.com/nushell/nushell/pull/7764" target="_blank" rel="noopener noreferrer">Allow main command to define top-level module command</a>, and <a href="https://github.com/nushell/nushell/pull/7720" target="_blank" rel="noopener noreferrer">Add const support for all overlay commands</a></li>
+<li>fdncred created <a href="https://github.com/nushell/nushell/pull/7926" target="_blank" rel="noopener noreferrer">update type check so that ++ with lists works better</a>, and <a href="https://github.com/nushell/nushell/pull/7866" target="_blank" rel="noopener noreferrer">with the release of rust 1.67, let's bump to 1.66.1</a>, and <a href="https://github.com/nushell/nushell/pull/7852" target="_blank" rel="noopener noreferrer">add decimal to SyntaxShape</a>, and <a href="https://github.com/nushell/nushell/pull/7851" target="_blank" rel="noopener noreferrer">add some startup performance metrics</a>, and <a href="https://github.com/nushell/nushell/pull/7831" target="_blank" rel="noopener noreferrer">print nushell startup time</a>, and <a href="https://github.com/nushell/nushell/pull/7802" target="_blank" rel="noopener noreferrer">fix signature display in help commands</a>, and <a href="https://github.com/nushell/nushell/pull/7772" target="_blank" rel="noopener noreferrer">update sqlparser dependency</a>, and <a href="https://github.com/nushell/nushell/pull/7771" target="_blank" rel="noopener noreferrer">update semver dep</a>, and <a href="https://github.com/nushell/nushell/pull/7745" target="_blank" rel="noopener noreferrer">Add cursor shape configuration for each edit mode</a>, and <a href="https://github.com/nushell/nushell/pull/7739" target="_blank" rel="noopener noreferrer">update base64 implementation to newer crate</a>, and <a href="https://github.com/nushell/nushell/pull/7726" target="_blank" rel="noopener noreferrer">update release-pkg comments for manual runs</a></li>
+<li>sholderbach created <a href="https://github.com/nushell/nushell/pull/7918" target="_blank" rel="noopener noreferrer">Pin <code>reedline</code> to new <code>0.15</code> for release</a>, and <a href="https://github.com/nushell/nushell/pull/7916" target="_blank" rel="noopener noreferrer">Apply more recent/nightly clippy lints</a>, and <a href="https://github.com/nushell/nushell/pull/7914" target="_blank" rel="noopener noreferrer">Bump <code>trash</code> to <code>3.0.1</code></a>, and <a href="https://github.com/nushell/nushell/pull/7906" target="_blank" rel="noopener noreferrer">Use variable names directly in the format strings</a>, and <a href="https://github.com/nushell/nushell/pull/7905" target="_blank" rel="noopener noreferrer">Remove unused <code>nu-test-support</code> in <code>nu-table</code></a>, and <a href="https://github.com/nushell/nushell/pull/7903" target="_blank" rel="noopener noreferrer">Update reedline for pre-release testing</a>, and <a href="https://github.com/nushell/nushell/pull/7902" target="_blank" rel="noopener noreferrer">Version bump for <code>0.75</code> release</a>, and <a href="https://github.com/nushell/nushell/pull/7721" target="_blank" rel="noopener noreferrer">Bump to <code>0.74.1</code> development version</a></li>
+<li>dependabot[bot] created <a href="https://github.com/nushell/nushell/pull/7911" target="_blank" rel="noopener noreferrer">Bump windows from 0.43.0 to 0.44.0</a>, and <a href="https://github.com/nushell/nushell/pull/7910" target="_blank" rel="noopener noreferrer">Bump serial_test from 0.10.0 to 1.0.0</a>, and <a href="https://github.com/nushell/nushell/pull/7909" target="_blank" rel="noopener noreferrer">Bump roxmltree from 0.16.0 to 0.17.0</a>, and <a href="https://github.com/nushell/nushell/pull/7908" target="_blank" rel="noopener noreferrer">Bump typetag from 0.1.8 to 0.2.5</a>, and <a href="https://github.com/nushell/nushell/pull/7907" target="_blank" rel="noopener noreferrer">Bump chrono-tz from 0.6.3 to 0.8.1</a>, and <a href="https://github.com/nushell/nushell/pull/7840" target="_blank" rel="noopener noreferrer">Bump actions-rust-lang/setup-rust-toolchain from 1.3.4 to 1.3.5</a>, and <a href="https://github.com/nushell/nushell/pull/7839" target="_blank" rel="noopener noreferrer">Bump sysinfo from 0.26.4 to 0.27.7</a>, and <a href="https://github.com/nushell/nushell/pull/7838" target="_blank" rel="noopener noreferrer">Bump miette from 5.3.0 to 5.5.0</a>, and <a href="https://github.com/nushell/nushell/pull/7837" target="_blank" rel="noopener noreferrer">Bump shadow-rs from 0.16.3 to 0.20.0</a>, and <a href="https://github.com/nushell/nushell/pull/7836" target="_blank" rel="noopener noreferrer">Bump rayon from 1.5.3 to 1.6.1</a>, and <a href="https://github.com/nushell/nushell/pull/7835" target="_blank" rel="noopener noreferrer">Bump scraper from 0.13.0 to 0.14.0</a>, and <a href="https://github.com/nushell/nushell/pull/7833" target="_blank" rel="noopener noreferrer">Bump regex from 1.6.0 to 1.7.1</a>, and <a href="https://github.com/nushell/nushell/pull/7807" target="_blank" rel="noopener noreferrer">Bump git2 from 0.16.0 to 0.16.1</a>, and <a href="https://github.com/nushell/nushell/pull/7806" target="_blank" rel="noopener noreferrer">Bump libgit2-sys from 0.14.1+1.5.0 to 0.14.2+1.5.1</a>, and <a href="https://github.com/nushell/nushell/pull/7805" target="_blank" rel="noopener noreferrer">Bump bumpalo from 3.11.0 to 3.12.0</a>, and <a href="https://github.com/nushell/nushell/pull/7770" target="_blank" rel="noopener noreferrer">Bump actions/stale from 3 to 6</a>, and <a href="https://github.com/nushell/nushell/pull/7769" target="_blank" rel="noopener noreferrer">Bump serial_test from 0.8.0 to 0.10.0</a>, and <a href="https://github.com/nushell/nushell/pull/7768" target="_blank" rel="noopener noreferrer">Bump quick-xml from 0.25.0 to 0.27.1</a>, and <a href="https://github.com/nushell/nushell/pull/7765" target="_blank" rel="noopener noreferrer">Bump dialoguer from 0.9.0 to 0.10.3</a>, and <a href="https://github.com/nushell/nushell/pull/7734" target="_blank" rel="noopener noreferrer">Bump uuid from 1.1.2 to 1.2.2</a>, and <a href="https://github.com/nushell/nushell/pull/7732" target="_blank" rel="noopener noreferrer">Bump once_cell from 1.16.0 to 1.17.0</a>, and <a href="https://github.com/nushell/nushell/pull/7731" target="_blank" rel="noopener noreferrer">Bump git2 from 0.15.0 to 0.16.0</a></li>
+<li>jntrnr created <a href="https://github.com/nushell/nushell/pull/7904" target="_blank" rel="noopener noreferrer">Use clippy-recommended simplification</a>, and <a href="https://github.com/nushell/nushell/pull/7871" target="_blank" rel="noopener noreferrer">Add 'enumerate' command for enumeration</a></li>
+<li>merelymyself created <a href="https://github.com/nushell/nushell/pull/7897" target="_blank" rel="noopener noreferrer">make <code>parse -r</code> columns return 0-indexed uncapitalised</a>, and <a href="https://github.com/nushell/nushell/pull/7789" target="_blank" rel="noopener noreferrer">let <code>find</code> take linebreaks into account in <code>Value::String</code></a>, and <a href="https://github.com/nushell/nushell/pull/7781" target="_blank" rel="noopener noreferrer">convert SyntaxShape::Table into the corresponding Type</a></li>
+<li>WindSoilder created <a href="https://github.com/nushell/nushell/pull/7896" target="_blank" rel="noopener noreferrer">make help commands search term don't generate $nothing</a>, and <a href="https://github.com/nushell/nushell/pull/7888" target="_blank" rel="noopener noreferrer">refactor: use <code>input_handler::operate</code> in ansi_strip command</a>, and <a href="https://github.com/nushell/nushell/pull/7884" target="_blank" rel="noopener noreferrer">mention <code>do</code> in <code>complete</code> command's doc</a>, and <a href="https://github.com/nushell/nushell/pull/7856" target="_blank" rel="noopener noreferrer">improve doc about flatten</a>, and <a href="https://github.com/nushell/nushell/pull/7848" target="_blank" rel="noopener noreferrer">Let redirection keep exit code</a>, and <a href="https://github.com/nushell/nushell/pull/7808" target="_blank" rel="noopener noreferrer">Fix multi-line redirection inside a block</a>, and <a href="https://github.com/nushell/nushell/pull/7743" target="_blank" rel="noopener noreferrer">dependency update: update polar to 0.26.1</a></li>
+<li>Hofer-Julian created <a href="https://github.com/nushell/nushell/pull/7892" target="_blank" rel="noopener noreferrer">Add Github Actions workflow to check for typos</a>, and <a href="https://github.com/nushell/nushell/pull/7868" target="_blank" rel="noopener noreferrer">Extract <code>gather_commandline_args</code></a>, and <a href="https://github.com/nushell/nushell/pull/7815" target="_blank" rel="noopener noreferrer">Reduce again the number of match calls</a>, and <a href="https://github.com/nushell/nushell/pull/7813" target="_blank" rel="noopener noreferrer">Reduce number of <code>match</code> calls</a>, and <a href="https://github.com/nushell/nushell/pull/7812" target="_blank" rel="noopener noreferrer">Extract manual <code>PWD</code> extraction with method <code>current_work_dir</code></a>, and <a href="https://github.com/nushell/nushell/pull/7804" target="_blank" rel="noopener noreferrer">Clean up <code>nu-cli/src/eval_file.rs</code></a>, and <a href="https://github.com/nushell/nushell/pull/7803" target="_blank" rel="noopener noreferrer">Move all functions of main.rs into modules</a>, and <a href="https://github.com/nushell/nushell/pull/7801" target="_blank" rel="noopener noreferrer">Cleanup of <code>src/main.rs</code></a></li>
+<li>bobhy created <a href="https://github.com/nushell/nushell/pull/7883" target="_blank" rel="noopener noreferrer">Support extended unicode escapes in strings: &quot;\u{10fff}&quot;</a></li>
+<li>rgwood created <a href="https://github.com/nushell/nushell/pull/7879" target="_blank" rel="noopener noreferrer">Name threads</a>, and <a href="https://github.com/nushell/nushell/pull/7877" target="_blank" rel="noopener noreferrer">Remove 🆖 comments</a>, and <a href="https://github.com/nushell/nushell/pull/7876" target="_blank" rel="noopener noreferrer">Clean up <code>cd.rs</code></a>, and <a href="https://github.com/nushell/nushell/pull/7875" target="_blank" rel="noopener noreferrer">Re-enable some good tests, remove some bad tests</a>, and <a href="https://github.com/nushell/nushell/pull/7857" target="_blank" rel="noopener noreferrer">Fix the build after #7204</a>, and <a href="https://github.com/nushell/nushell/pull/7740" target="_blank" rel="noopener noreferrer">Trim quotes when shelling out to cmd.exe</a>, and <a href="https://github.com/nushell/nushell/pull/7722" target="_blank" rel="noopener noreferrer">Combine benchmarks to speed up <code>cargo bench</code> build times</a></li>
+<li>zhiburt created <a href="https://github.com/nushell/nushell/pull/7861" target="_blank" rel="noopener noreferrer">nu-commands/table (<code>table -e</code>) Recognize limited space better</a>, and <a href="https://github.com/nushell/nushell/pull/7778" target="_blank" rel="noopener noreferrer">nu-table: Wrap last column in <code>table -e</code></a></li>
+<li>SUPERCILEX created <a href="https://github.com/nushell/nushell/pull/7859" target="_blank" rel="noopener noreferrer">Fix <code>do</code> swallowing all output when ignoring errors</a></li>
+<li>NotLebedev created <a href="https://github.com/nushell/nushell/pull/7850" target="_blank" rel="noopener noreferrer">To csv fix</a>, and <a href="https://github.com/nushell/nushell/pull/7751" target="_blank" rel="noopener noreferrer">Ansi link</a></li>
+<li>Dorumin created <a href="https://github.com/nushell/nushell/pull/7834" target="_blank" rel="noopener noreferrer">Expose filtering by file type in glob</a></li>
+<li>michel-slm created <a href="https://github.com/nushell/nushell/pull/7824" target="_blank" rel="noopener noreferrer">[nu-test-support] Gate system locale tests</a></li>
+<li>VincenzoCarlino created <a href="https://github.com/nushell/nushell/pull/7823" target="_blank" rel="noopener noreferrer">Feat/7725 url join</a></li>
+<li>zoechi created <a href="https://github.com/nushell/nushell/pull/7811" target="_blank" rel="noopener noreferrer">Fix typos</a></li>
+<li>webbedspace created <a href="https://github.com/nushell/nushell/pull/7798" target="_blank" rel="noopener noreferrer">Do not list deprecated subcommands in <code>help &lt;cmd&gt;</code></a>, and <a href="https://github.com/nushell/nushell/pull/7776" target="_blank" rel="noopener noreferrer"><code>benchmark</code> now pipes input into the closure</a>, and <a href="https://github.com/nushell/nushell/pull/7752" target="_blank" rel="noopener noreferrer"><code>str length</code>, <code>str substring</code>, <code>str index-of</code>, <code>split words</code> and <code>split chars</code> now use graphemes instead of UTF-8 bytes</a>, and <a href="https://github.com/nushell/nushell/pull/7738" target="_blank" rel="noopener noreferrer">Disallow <code>encode</code>'s silent conversion to HTML entities (and add <code>-i</code>/<code>--ignore-errors</code> flag to re-allow it)</a></li>
+<li>Kazuki-Ya created <a href="https://github.com/nushell/nushell/pull/7796" target="_blank" rel="noopener noreferrer"><code>fetch</code> -&gt; <code>http get</code> and <code>post</code> -&gt; <code>http post</code></a></li>
+<li>zschaffer created <a href="https://github.com/nushell/nushell/pull/7785" target="_blank" rel="noopener noreferrer">add magenta to ansi command as synonym for purple</a></li>
+<li>1Kinoti created <a href="https://github.com/nushell/nushell/pull/7784" target="_blank" rel="noopener noreferrer">add dedicated <code>const in pipeline</code>, <code>const builtin var</code> errors</a>, and <a href="https://github.com/nushell/nushell/pull/7759" target="_blank" rel="noopener noreferrer">Allow underscores in integers and floats</a></li>
+<li>Xoffio created <a href="https://github.com/nushell/nushell/pull/7779" target="_blank" rel="noopener noreferrer">Fixes Issue 7648 which crashes nushell and happens when an alias name is shorter than the alias command and the alias command is an external command.</a>, and <a href="https://github.com/nushell/nushell/pull/7756" target="_blank" rel="noopener noreferrer">Add test for fix of issue #7754</a></li>
+<li>DaRacci created <a href="https://github.com/nushell/nushell/pull/7775" target="_blank" rel="noopener noreferrer">Check all user groups.</a></li>
+<li>hustcer created <a href="https://github.com/nushell/nushell/pull/7773" target="_blank" rel="noopener noreferrer">fix some typos</a>, and <a href="https://github.com/nushell/nushell/pull/7723" target="_blank" rel="noopener noreferrer">Fix generated doc for <code>explore</code> commands</a></li>
+<li>afetisov created <a href="https://github.com/nushell/nushell/pull/7755" target="_blank" rel="noopener noreferrer">Fix typos and use more idiomatic assertions</a></li>
+<li>nanoqsh created <a href="https://github.com/nushell/nushell/pull/7737" target="_blank" rel="noopener noreferrer">Detailed message during core dumped</a></li>
+<li>murex971 created <a href="https://github.com/nushell/nushell/pull/7736" target="_blank" rel="noopener noreferrer">Add search terms in random and expression categories</a></li>
+</ul>
+<h2 id="extension" tabindex="-1"> Extension</h2>
+<ul>
+<li>Hofer-Julian created <a href="https://github.com/nushell/vscode-nushell-lang/pull/75" target="_blank" rel="noopener noreferrer">Add another directory where nu might be installed</a></li>
+<li>fdncred created <a href="https://github.com/nushell/vscode-nushell-lang/pull/74" target="_blank" rel="noopener noreferrer">get ready for new 1.0 release</a></li>
+<li>glcraft created <a href="https://github.com/nushell/vscode-nushell-lang/pull/73" target="_blank" rel="noopener noreferrer">New syntax highlight</a></li>
+</ul>
+<h2 id="documentation" tabindex="-1"> Documentation</h2>
+<ul>
+<li>Hofer-Julian created <a href="https://github.com/nushell/nushell.github.io/pull/757" target="_blank" rel="noopener noreferrer">Reflect the separation of block and closure</a>, and <a href="https://github.com/nushell/nushell.github.io/pull/754" target="_blank" rel="noopener noreferrer">Add separate page for setting Nu as default shell</a>, and <a href="https://github.com/nushell/nushell.github.io/pull/753" target="_blank" rel="noopener noreferrer">Add Github Actions workflow to check typos</a></li>
+<li>bobhy created <a href="https://github.com/nushell/nushell.github.io/pull/756" target="_blank" rel="noopener noreferrer">Document \u{x...} unicode escapes</a>, and <a href="https://github.com/nushell/nushell.github.io/pull/755" target="_blank" rel="noopener noreferrer">document 7883 for release notes</a></li>
+<li>max-nextcloud created <a href="https://github.com/nushell/nushell.github.io/pull/752" target="_blank" rel="noopener noreferrer">Update rust version requirement in installation</a></li>
+<li>WindSoilder created <a href="https://github.com/nushell/nushell.github.io/pull/751" target="_blank" rel="noopener noreferrer">update doc about stdout and stderr</a></li>
+<li>webbedspace created <a href="https://github.com/nushell/nushell.github.io/pull/747" target="_blank" rel="noopener noreferrer">Add my changes</a></li>
+<li>amtoine created <a href="https://github.com/nushell/nushell.github.io/pull/745" target="_blank" rel="noopener noreferrer">link to default config file in the &quot;explore&quot; page</a>, and <a href="https://github.com/nushell/nushell.github.io/pull/744" target="_blank" rel="noopener noreferrer">remove a broken link in &quot;Introducing nushell&quot; # &quot;Plugins&quot;</a>, and <a href="https://github.com/nushell/nushell.github.io/pull/743" target="_blank" rel="noopener noreferrer">fix a typo on &quot;language&quot;, was spelled &quot;langauge&quot;</a></li>
+<li>rgwood created <a href="https://github.com/nushell/nushell.github.io/pull/740" target="_blank" rel="noopener noreferrer">Disable prefetch setting</a></li>
+<li>waldyrious created <a href="https://github.com/nushell/nushell.github.io/pull/738" target="_blank" rel="noopener noreferrer">Add two style tweaks to improve tables in code blocks</a></li>
+<li>hustcer created <a href="https://github.com/nushell/nushell.github.io/pull/736" target="_blank" rel="noopener noreferrer">Refresh commands docs for nu v0.74</a></li>
+<li>hbt created <a href="https://github.com/nushell/nushell.github.io/pull/667" target="_blank" rel="noopener noreferrer">fix deprecated cmd</a></li>
+</ul>
+<h2 id="nu-scripts" tabindex="-1"> Nu_Scripts</h2>
+<ul>
+<li>Neur1n created <a href="https://github.com/nushell/nu_scripts/pull/367" target="_blank" rel="noopener noreferrer">nu_conda: Another Conda module with Better Performance</a></li>
+<li>fdncred created <a href="https://github.com/nushell/nu_scripts/pull/365" target="_blank" rel="noopener noreferrer">small tweaks to get panache working again</a>, and <a href="https://github.com/nushell/nu_scripts/pull/364" target="_blank" rel="noopener noreferrer">fix oh-my.nu script after <code>do</code> changes in nushell</a>, and <a href="https://github.com/nushell/nu_scripts/pull/351" target="_blank" rel="noopener noreferrer">fix ohmy.nu path handling on windows</a>, and <a href="https://github.com/nushell/nu_scripts/pull/349" target="_blank" rel="noopener noreferrer">add timed_weather that checks the weather at timed intervals</a>, and <a href="https://github.com/nushell/nu_scripts/pull/348" target="_blank" rel="noopener noreferrer">fixed a type-o in the weather script</a>, and <a href="https://github.com/nushell/nu_scripts/pull/342" target="_blank" rel="noopener noreferrer">fix some bugs when on slash</a></li>
+<li>Hofer-Julian created <a href="https://github.com/nushell/nu_scripts/pull/363" target="_blank" rel="noopener noreferrer">Fix scoop completions</a>, and <a href="https://github.com/nushell/nu_scripts/pull/362" target="_blank" rel="noopener noreferrer">git-completions: Stop checking <code>--force-with-lease</code></a>, and <a href="https://github.com/nushell/nu_scripts/pull/361" target="_blank" rel="noopener noreferrer">conda: Check if environment exists before activating</a>, and <a href="https://github.com/nushell/nu_scripts/pull/360" target="_blank" rel="noopener noreferrer">Explain how to create an alias for conda activate without a prompt</a></li>
+<li>schrieveslaach created <a href="https://github.com/nushell/nu_scripts/pull/359" target="_blank" rel="noopener noreferrer">Fix git checkout/switch completions</a>, and <a href="https://github.com/nushell/nu_scripts/pull/358" target="_blank" rel="noopener noreferrer">Improve git checkout/switch completions</a>, and <a href="https://github.com/nushell/nu_scripts/pull/355" target="_blank" rel="noopener noreferrer">Add git cherry-pick completion</a></li>
+<li>1Kinoti created <a href="https://github.com/nushell/nu_scripts/pull/357" target="_blank" rel="noopener noreferrer">add todo script</a></li>
+<li>amtoine created <a href="https://github.com/nushell/nu_scripts/pull/356" target="_blank" rel="noopener noreferrer">FIX: export the <code>git cherry-pick</code> completion</a></li>
+<li>zoechi created <a href="https://github.com/nushell/nu_scripts/pull/354" target="_blank" rel="noopener noreferrer">Change &quot;list of values&quot; to &quot;list of records&quot; with value and description</a>, and <a href="https://github.com/nushell/nu_scripts/pull/353" target="_blank" rel="noopener noreferrer">Export command to make it use-able</a>, and <a href="https://github.com/nushell/nu_scripts/pull/350" target="_blank" rel="noopener noreferrer">Add completions for Bitwarden CLI client</a></li>
+<li>fj0r created <a href="https://github.com/nushell/nu_scripts/pull/347" target="_blank" rel="noopener noreferrer">K8s</a>, and <a href="https://github.com/nushell/nu_scripts/pull/327" target="_blank" rel="noopener noreferrer">ssh kubernetes docker git just nvim</a></li>
+<li>fitzypop created <a href="https://github.com/nushell/nu_scripts/pull/346" target="_blank" rel="noopener noreferrer">add git_branch_cleanup.nu script and readme</a></li>
+<li>bobhy created <a href="https://github.com/nushell/nu_scripts/pull/345" target="_blank" rel="noopener noreferrer">prompt/full-line.nu -- full width prompt</a></li>
+<li>stormasm created <a href="https://github.com/nushell/nu_scripts/pull/344" target="_blank" rel="noopener noreferrer">add a Readme to the make_release directory</a></li>
+<li>kubouch created <a href="https://github.com/nushell/nu_scripts/pull/343" target="_blank" rel="noopener noreferrer">Add initial dependency resolver for nu release</a></li>
+<li>TornaxO7 created <a href="https://github.com/nushell/nu_scripts/pull/337" target="_blank" rel="noopener noreferrer">adding git aliases</a></li>
+<li>DrakeTDL created <a href="https://github.com/nushell/nu_scripts/pull/329" target="_blank" rel="noopener noreferrer">feat(custom-completions): add reflector completions</a></li>
+<li>ldsands created <a href="https://github.com/nushell/nu_scripts/pull/319" target="_blank" rel="noopener noreferrer">Add files needed for Poetry custom-completions</a></li>
+</ul>
+<h2 id="reedline" tabindex="-1"> reedline</h2>
+<ul>
+<li>sholderbach created <a href="https://github.com/nushell/reedline/pull/533" target="_blank" rel="noopener noreferrer">Remove unstable rustdoc lint</a>, and <a href="https://github.com/nushell/reedline/pull/532" target="_blank" rel="noopener noreferrer">Bump version for <code>0.15</code> release</a></li>
+<li>dgkf created <a href="https://github.com/nushell/reedline/pull/531" target="_blank" rel="noopener noreferrer">Allow configuration of multiline prompt color</a></li>
+</ul>
+]]></content>
+    <author>
+      <name>The Nu Authors</name>
+    </author>
+    <contributor>
+      <name>The Nu Authors</name>
+    </contributor>
+    <published>2023-01-31T21:53:23.000Z</published>
+    <rights>Copyright by The Nu Authors</rights>
+  </entry>
   <entry>
     <title type="html">Nushell 0.74</title>
     <id>https://www.nushell.sh/blog/2023-01-10-nushell_0_74.html</id>
@@ -4206,168 +4437,6 @@ barbaz
       <name>The Nu Authors</name>
     </contributor>
     <published>2021-06-22T19:16:42.000Z</published>
-    <rights>Copyright by The Nu Authors</rights>
-  </entry>
-  <entry>
-    <title type="html">Nushell 0.32</title>
-    <id>https://www.nushell.sh/blog/2021-06-01-nushell_0_32.html</id>
-    <link href="https://www.nushell.sh/blog/2021-06-01-nushell_0_32.html"/>
-    <updated>2022-03-27T03:17:24.000Z</updated>
-    <summary type="html"><![CDATA[<h1 id="nushell-0-32" tabindex="-1"> Nushell 0.32</h1>
-<p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your commandline. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful commandline pipelines.</p>
-<p>Today, we're releasing 0.32 of Nu. This release contains a large amount of usability improvements.</p>
-]]></summary>
-    <content type="html"><![CDATA[<h1 id="nushell-0-32" tabindex="-1"> Nushell 0.32</h1>
-<p>Nushell, or Nu for short, is a new shell that takes a modern, structured approach to your commandline. It works seamlessly with the data from your filesystem, operating system, and a growing number of file formats to make it easy to build powerful commandline pipelines.</p>
-<p>Today, we're releasing 0.32 of Nu. This release contains a large amount of usability improvements.</p>
-
-<h1 id="where-to-get-it" tabindex="-1"> Where to get it</h1>
-<p>Nu 0.32 is available as <a href="https://github.com/nushell/nushell/releases/tag/0.32.0" target="_blank" rel="noopener noreferrer">pre-built binaries</a> or from <a href="https://crates.io/crates/nu" target="_blank" rel="noopener noreferrer">crates.io</a>. If you have Rust installed you can install it using <code>cargo install nu</code>.</p>
-<p>If you want all the goodies, you can install <code>cargo install nu --features=extra</code>.</p>
-<p>If you'd like to try the experimental paging feature in this release, you can install with <code>cargo install nu --features=table-pager</code>.</p>
-<p>As part of this release, we also publish a set of plugins you can install and use with Nu. To install, use <code>cargo install nu_plugin_&lt;plugin name&gt;</code>.</p>
-<h1 id="what-s-new" tabindex="-1"> What's New</h1>
-<p>There are a <em>lot</em> of new changes in this release of Nu. You can check these out by in this blog post, or, if you like, there is also an accompanying <a href="https://youtu.be/AqYxhJKblvY" target="_blank" rel="noopener noreferrer">YouTube video of 0.32 features</a> as well as updated <a href="https://github.com/nushell/nu_scripts" target="_blank" rel="noopener noreferrer">Nushell samples</a>.</p>
-<h2 id="new-expression-syntax-jt" tabindex="-1"> New expression syntax (jt)</h2>
-<p>We've simplified our expression/subexpression logic to make it much more predictable and universal. The parser will now automatically handle by command calls and expressions in the same way, so that you don't have to remember to use <code>=</code> to switch from one mode to the next.</p>
-<p>Before 0.32:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>=</span> <span>10</span> + <span>3</span>
-<span>13</span>
-</code></pre></div><p>With 0.32:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>10</span> + <span>3</span>
-<span>13</span>
-</code></pre></div><p>You can also use any value as an expression, including variables or strings:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>"hello world"</span>
-hello world
-</code></pre></div><p>Subexpressions also follow a similar simplification. We've removed the previous <code>$()</code> style, replacing it with <code>()</code>. This allows you to put subexpressions anywhere that you want.</p>
-<div data-ext="sh"><pre><code><span>></span> <span>10</span> * <span>(</span><span>3</span> + <span>2</span><span>)</span>
-<span>50</span>
-</code></pre></div><div data-ext="sh"><pre><code><span>></span> <span>echo</span> <span>((</span>ls <span>|</span> length<span>)</span> / <span>2</span><span>)</span>
-<span>7</span>
-</code></pre></div><p>This allows parens to mean &quot;do this first&quot; in both math expression and command calls.</p>
-<h2 id="subexpressions-and-column-paths-jt" tabindex="-1"> Subexpressions and column paths (jt)</h2>
-<p>The new subexpressions can also use &quot;column paths&quot;, or paths that start from the current value and travel to a subset of the structured data inside.</p>
-<p>For example, you could combine column paths with some subtraction to find when you last booted your system:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>(</span>date now<span>)</span> - <span>(</span>sys<span>)</span>.host.uptime
-<span>2021</span>-05-31 09:00:24.124736365 +12:00
-</code></pre></div><h2 id="new-string-interpolation-jt" tabindex="-1"> New string interpolation (jt)</h2>
-<p>We've also updated string interpolation to match the expression/subexpression simplification mentioned above. The same &quot;parens mean do this first&quot; pattern applies:</p>
-<div data-ext="sh"><pre><code><span>></span> $<span>"the result is (3 + 2)"</span>
-the result is <span>5</span>
-</code></pre></div><p>For interpolation that uses column paths, wrap the entire column path in a pair of parens:</p>
-<div data-ext="sh"><pre><code><span>></span> $<span>"uptime is (sys).host.uptime"</span>
-<span>uptime</span> is <span>[</span>row <span>host</span> cpu mem temp<span>]</span>.host.uptime
-
-<span>></span> $<span>"uptime is ((sys).host.uptime)"</span>
-<span>uptime</span> is 1day 19hr 57min 7sec
-</code></pre></div><p>As part of this change, we removed the previous backtick string interpolation form.</p>
-<h2 id="environment-loading-lily-mara" tabindex="-1"> Environment loading (lily-mara)</h2>
-<p>In Nushell, we've worked hard to limit the amount of mutation that will happen in the system. This helps developers focus on the task at hand, and not have to think about non-local effects from the code they're running.</p>
-<p>At the same time, we've also wanted to support virtual environment systems like <code>virtualenv</code>, <code>conda</code>, and others. Traditionally these systems updated the global environment from inside of their activate/deactivate commands.</p>
-<p>With 0.32, we feel like we've managed to come up with a solution that meets both the Nushell philosophy of limiting mutation while also giving the freedom to port virtual environment scripts to Nushell.</p>
-<p>We call it &quot;environment loading&quot;. Here, rather than having commands mutate the global environment, they instead return a table of changes they'd like to apply to the environment. This table can be then loaded into the current scope, effectively separating the &quot;what&quot; of the update from the &quot;when&quot;.</p>
-<p>Let's try this by creating a table of three new environment variables we'll load:</p>
-<div data-ext="sh"><pre><code>def activate <span>[</span><span>]</span> <span>{</span>
-  <span>[</span><span>[</span>name, value<span>]</span><span>;</span> <span>[</span>FOO, BAR<span>]</span> <span>[</span>DEBUG, TRUE<span>]</span> <span>[</span>CURRENTENV, NUSHELL<span>]</span><span>]</span>
-<span>}</span>
-
-load-env <span>(</span>activate<span>)</span>
-<span>echo</span> <span>$nu</span>.env.FOO
-</code></pre></div><p>The changes to the environment are still scoped to the block you're inside of. In the example above, because we're at the top level, we can safely shadow the previous environment values.</p>
-<h2 id="locale-improvements-fdncred" tabindex="-1"> Locale improvements (fdncred)</h2>
-<p>When you have <code>filesize_format = &quot;B&quot;</code> set in your config.toml file you should be able to see the thousands separators based on your locale. i.e. some locales use <code>,</code> other locales use <code>.</code> and i'm not sure if there are others.</p>
-<p>This is with the <code>de_DE</code> locale on linux: (note the number separators)
-<img src="https://user-images.githubusercontent.com/343840/119736601-93ff4b00-be43-11eb-9f17-0d9303e89cd6.png" alt="image"></p>
-<p>This is with <code>en-US</code> on windows:
-<img src="https://user-images.githubusercontent.com/343840/119736671-b2fddd00-be43-11eb-91c0-512cad551d5d.png" alt="image"></p>
-<h2 id="better-line-editing-support-schrieveslaach-fdncred" tabindex="-1"> Better line editing support (schrieveslaach, fdncred)</h2>
-<h3 id="partial-completions" tabindex="-1"> Partial completions</h3>
-<p>With 0.32, you can use ctrl+right arrow to do a partial completion from a completion hint.</p>
-<h3 id="delete-word" tabindex="-1"> Delete word</h3>
-<p>You can also use alt+backspace to delete whole words.</p>
-<h3 id="and-more" tabindex="-1"> And more</h3>
-<p>For a full list of updated line editing capabilities, check out the update <a href="https://github.com/nushell/nushell/blob/main/docs/sample_config/keybindings.yml" target="_blank" rel="noopener noreferrer">sample keybinding file</a>.</p>
-<h2 id="explicit-block-parameters-jt" tabindex="-1"> Explicit block parameters (jt)</h2>
-<p>You can now name block parameters. You can use this to help make working with blocks easier to read.</p>
-<div data-ext="sh"><pre><code><span>></span> <span>ls</span> <span>|</span> each <span>{</span> <span>|</span>row<span>|</span> <span>echo</span> <span>$row</span>.name <span>}</span>
-</code></pre></div><h2 id="do-supports-passing-arguments-stepnivik" tabindex="-1"> <code>do</code> supports passing arguments (stepnivik)</h2>
-<p>You can now pass arguments to give the running block as part of a <code>do</code> call:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>do</span> <span>{</span> <span>|</span>x<span>|</span> <span>$x</span> + <span>100</span><span>}</span> <span>55</span>
-<span>155</span>
-</code></pre></div><h2 id="new-for-in-command-jt" tabindex="-1"> New <code>for..in</code> command (jt)</h2>
-<p>With the new <code>for..in</code> command, you can write more natural iterating loops:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>for</span> <span>$x</span> <span>in</span> <span>1</span><span>..</span><span>3</span> <span>{</span> <span>echo</span> <span>(</span><span>$x</span> + <span>10</span><span>)</span> <span>}</span>
-───┬────
- <span>0</span> │ <span>11</span>
- <span>1</span> │ <span>12</span>
- <span>2</span> │ <span>13</span>
-───┴────
-</code></pre></div><h2 id="flags-can-now-use-equals-andrasio" tabindex="-1"> Flags can now use equals (andrasio)</h2>
-<p>You can now use <code>=</code> between a flag and its value.</p>
-<p>For example, in addition to:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>seq</span> <span>--separator</span> <span>':'</span> <span>1</span> <span>10</span>
-<span>1</span>:2:3:4:5:6:7:8:9:10
-</code></pre></div><p>You can also write:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>seq</span> <span>--separator</span><span>=</span><span>':'</span> <span>1</span> <span>10</span>
-<span>1</span>:2:3:4:5:6:7:8:9:10
-</code></pre></div><h2 id="other-improvements" tabindex="-1"> Other improvements</h2>
-<h3 id="simple-string-concatenation-jt" tabindex="-1"> Simple string concatenation (jt)</h3>
-<p>You can now create a new string by concatenating two strings <code>&quot;hello &quot; + &quot;world&quot;</code>.</p>
-<h3 id="path-relative-to-kubouch" tabindex="-1"> Path relative-to (kubouch)</h3>
-<p>Implements path relative-to subcommand. It converts the input path as a relative to the argument path, like this:</p>
-<div data-ext="sh"><pre><code><span>></span> <span>'eggs/bacon/sausage/spam'</span> <span>|</span> path relative-to <span>'eggs/bacon/sausage'</span>
-spam
-</code></pre></div><p>There are also additional <a href="https://github.com/nushell/nushell/pull/3441" target="_blank" rel="noopener noreferrer"><code>path</code>-related fixes</a>.</p>
-<h3 id="negative-indexing-for-range-alexshadley" tabindex="-1"> Negative indexing for range (alexshadley)</h3>
-<p>You can now pass negative ranges to the <code>range</code> command, and it will work from the back of the input.</p>
-<div data-ext="text"><pre><code>> echo [1 2 3 4 5] | range (-3..)
-</code></pre></div><p>Will return <code>[3, 4, 5]</code>.</p>
-<h3 id="default-integer-is-now-signed-64-bit-jt" tabindex="-1"> Default integer is now signed 64-bit (jt)</h3>
-<p>In 0.32, adds a new primitive data type for i64 and makes it the default integer type.</p>
-<h3 id="improved-filename-support-ahkrr-fdncred" tabindex="-1"> Improved filename support (ahkrr, fdncred)</h3>
-<p>Filename <a href="https://github.com/nushell/nushell/pull/3524" target="_blank" rel="noopener noreferrer">quoting for #</a>. Pipes are <a href="https://github.com/nushell/nushell/pull/3489" target="_blank" rel="noopener noreferrer">also now escaped</a></p>
-<h3 id="sqlite-improvements-garfield96" tabindex="-1"> sqlite improvements (Garfield96)</h3>
-<p>A panic in <a href="https://github.com/nushell/nushell/pull/3522" target="_blank" rel="noopener noreferrer">sqlite support has been fixed</a> and the support rusqlite crate <a href="https://github.com/nushell/nushell/pull/3523" target="_blank" rel="noopener noreferrer">has been updated</a>.</p>
-<h3 id="seq-is-now-more-nu-like-fdncred" tabindex="-1"> <code>seq</code> is now more nu-like (fdncred)</h3>
-<p>The <code>seq</code> command is now more nushell friendly by returning numbers when it can and strings when it must. This will definitely break some scripts.</p>
-<p><img src="https://user-images.githubusercontent.com/343840/117849029-83e34b00-b249-11eb-8ecf-ec026ea468f7.png" alt="image"></p>
-<h3 id="case-insensitive-completions-are-now-the-default-on-windows-sympatron" tabindex="-1"> Case-insensitive completions are now the default on Windows (Sympatron)</h3>
-<p>Since Windows filenames are case-insensitive, This changes to case-insensitive completion matching by default. All other platforms still use case-sensitive matching by default.</p>
-<h3 id="porting-commands-to-the-new-engine-efx-lhkipp-elferherrera" tabindex="-1"> Porting commands to the new engine (efx, LhKipp, elferherrera)</h3>
-<p>More commands have been updated to use the new engine-p engine.</p>
-<h3 id="char-now-has-more-characters-fdncred-kubouch" tabindex="-1"> <code>char</code> now has more characters (fdncred, kubouch)</h3>
-<p>The <code>char</code> command now supports an <a href="https://github.com/nushell/nushell/pull/3457" target="_blank" rel="noopener noreferrer">additional set of characters</a>. It also supports the path separator character.</p>
-<p>You can use <code>char --list</code> to see the full list of available character and ansi values.</p>
-<h3 id="protect-against-bad-config-more-defensively-fdncred" tabindex="-1"> Protect against bad config more defensively (fdncred)</h3>
-<p>Nushell is now more resilient if it encounters <a href="https://github.com/nushell/nushell/pull/3510" target="_blank" rel="noopener noreferrer">a bad config file</a>.</p>
-<h3 id="better-glob-support-for-rm-lily-mara" tabindex="-1"> Better glob support for <code>rm</code> (lily-mara)</h3>
-<p>The <code>*</code> wildcard should not attempt to delete files with a leading dot unless the more explicit <code>.*</code> is used. <code>rm *</code> should also not attempt to delete the current directory or its parent directory (. and ..), either. With this release, these should now be followed.</p>
-<h1 id="breaking-changes" tabindex="-1"> Breaking changes</h1>
-<ul>
-<li>The previous math mode command <code>=</code> has been replaced by a smarter parser that can autodetect math mode based on the first token. Math mode calls like <code>= 10 / 2</code> are now simply <code>10 / 2</code>.</li>
-<li>Invocations of the style <code>$()</code> have now been replaced by <code>()</code> subexpressions. <code>$(= 2 + 3)</code> is now <code>(2 + 3)</code></li>
-<li>String interpolation of the style:</li>
-</ul>
-<div data-ext="sh"><pre><code><span><span>`</span>the result is <span>{</span><span>{</span><span>=</span> <span>1</span> + <span>2</span><span>}</span><span>}</span><span>`</span></span>
-</code></pre></div><p>Are now replaced with:</p>
-<div data-ext="sh"><pre><code>$<span>"the result is (1 + 2)"</span>
-</code></pre></div><ul>
-<li><code>seq</code> will now return numbers when possible</li>
-<li>The default integer is now signed 64-bit integer and not big integers.</li>
-<li>The <code>unit</code> type has now been split into <code>filesize</code> and <code>duration</code> for better utility.</li>
-</ul>
-<h1 id="looking-ahead" tabindex="-1"> Looking ahead</h1>
-<p>Nushell 0.32 is the first version of Nushell that begins to show what the 1.0 Nushell language will feel like. The easier, and more uniform, expression and subexpression syntax will let us continue to evolve towards a language that's both easier to read and easier to write.</p>
-<p>There are some long-standing issues in the engine that are preventing improved completions, and we'd like to address these issues and begin work on smarter completions.</p>
-<p>Elferherrera has also been hard at work on a dataframe implementation that we're exploring for inclusion into Nushell. You can try this out by compiling with the <code>dataframe</code> feature. If you check it out, let us know how it goes.</p>
-]]></content>
-    <author>
-      <name>The Nu Authors</name>
-    </author>
-    <contributor>
-      <name>The Nu Authors</name>
-    </contributor>
-    <published>2021-06-01T01:11:18.000Z</published>
     <rights>Copyright by The Nu Authors</rights>
   </entry>
 </feed>
