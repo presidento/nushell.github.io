@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="https://www.nushell.sh/pt-BR/rss.xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <atom:link href="https://www.nushell.sh/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://www.nushell.sh/pt-BR/rss.xml" rel="self" type="application/rss+xml"/>
     <title>Nushell</title>
     <link>https://www.nushell.sh/pt-BR/</link>
     <description>Um novo tipo de shell.</description>
     <language>pt-BR</language>
-    <pubDate>Sun, 05 Feb 2023 23:49:10 GMT</pubDate>
-    <lastBuildDate>Sun, 05 Feb 2023 23:49:10 GMT</lastBuildDate>
+    <pubDate>Wed, 08 Feb 2023 04:43:46 GMT</pubDate>
+    <lastBuildDate>Wed, 08 Feb 2023 04:43:46 GMT</lastBuildDate>
     <generator>vuepress-plugin-feed2</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
   </channel>

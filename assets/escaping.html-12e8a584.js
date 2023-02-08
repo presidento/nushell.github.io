@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-7ac8b69a","path":"/zh-CN/book/escaping.html","title":"转移到系统","lang":"zh-CN","frontmatter":{},"headers":[],"filePathRelative":"zh-CN/book/escaping.md","git":{"createdTime":1650114979000,"updatedTime":1650114979000,"contributors":[{"name":"Justin Ma","email":"hustcer@outlook.com","commits":1}]}}');export{t as data};
