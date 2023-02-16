@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-595b3204","path":"/commands/dataframe.html","title":"Dataframe","lang":"English","frontmatter":{},"headers":[],"filePathRelative":"commands/dataframe.md","git":{"createdTime":1676562979000,"updatedTime":1676562979000,"contributors":[{"name":"Hofer-Julian","email":"30049909+Hofer-Julian@users.noreply.github.com","commits":1}]}}');export{a as data};

@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-6048bd67","path":"/commands/prompt.html","title":"Prompt","lang":"English","frontmatter":{},"headers":[],"filePathRelative":"commands/prompt.md","git":{"createdTime":1676562979000,"updatedTime":1676562979000,"contributors":[{"name":"Hofer-Julian","email":"30049909+Hofer-Julian@users.noreply.github.com","commits":1}]}}');export{t as data};

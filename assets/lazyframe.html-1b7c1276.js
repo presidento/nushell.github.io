@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-e837bd64","path":"/commands/lazyframe.html","title":"Lazyframe","lang":"English","frontmatter":{},"headers":[],"filePathRelative":"commands/lazyframe.md","git":{"createdTime":1676562979000,"updatedTime":1676562979000,"contributors":[{"name":"Hofer-Julian","email":"30049909+Hofer-Julian@users.noreply.github.com","commits":1}]}}');export{e as data};
