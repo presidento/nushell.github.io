@@ -744,10 +744,6 @@ Another operation that can be done with masks is setting or replacing a value
 from a series. For example, we can change the value in the column `first` where
 the value is equal to `a`
 
-::: warning
-This is example is not updated to recent Nushell versions.
-:::
-
 ```shell
 ❯ $df | dfr get first | dfr set new --mask ($df.first =~ a)
 ╭───┬────────╮
@@ -1079,9 +1075,10 @@ whenever possible, their analogous Nushell command.
 
 ::: warning
 This list may be outdated. To get the up-to-date command list, see
-[Dataframe](/commands/categories/dataframe.md)
-[Lazyframe](/commands/categories/lazyframe.md) and
-[Dataframe Or Lazyframe](/commands/categories/dataframe_or_lazyframe.md)
+[Dataframe](/commands/categories/dataframe.md),
+[Lazyframe](/commands/categories/lazyframe.md),
+[Dataframe Or Lazyframe](/commands/categories/dataframe_or_lazyframe.md), and
+[Expression](/commands/categories/expression.md)
 command categories.
 :::
 
